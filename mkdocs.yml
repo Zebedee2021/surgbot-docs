@@ -1,5 +1,5 @@
-site_name: 雄安手术器械护士机器人
-site_description: 雄安宣武医院手术器械护士机器人项目文档
+site_name: 手术器械护士机器助手
+site_description: 手术器械护士机器助手项目文档
 site_author: SurgBot Team
 
 theme:
@@ -92,6 +92,7 @@ nav:
     - 里程碑: progress/milestones.md
   - 会议记录:
     - meeting/index.md
+    - 2026/02/05 现场测试评审: meeting/2026/0205_field_review.md
   - 测试记录:
     - 测试计划: testing/index.md
     - 2026年2月现场测试: testing/records/202602_onsite.md
