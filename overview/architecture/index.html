@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -711,6 +715,78 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        程序框架结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        状态机设计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模块解耦设计
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="模块解耦设计">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        硬件驱动层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        功能模块层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心控制层
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2690,6 +2766,78 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        程序框架结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        状态机设计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        模块解耦设计
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="模块解耦设计">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        硬件驱动层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        功能模块层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心控制层
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2823,6 +2971,142 @@
 </tr>
 </tbody>
 </table>
+<h2 id="_10">程序框架结构<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p>系统采用<strong>分层架构</strong>设计，自底向上分为硬件驱动层、功能模块层、核心控制层，各层职责清晰、接口明确。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>surgical_robot_cr5af/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── .vscode/                # VS Code 远程调试 / 任务配置
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── hardware/               # 硬件驱动层
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── cr5af_arm.py        # 机械臂 SDK 封装
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── camera_driver.py    # 双目 / 3D 相机驱动
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   ├── microphone_driver.py # 麦克风 / 语音采集驱动
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   ├── gripper_driver.py   # 末端夹爪驱动
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│   └── hand_eye_calib.py   # 半自动化手眼标定
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>├── modules/                # 功能模块层
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│   ├── perception/         # 感知模块（YOLO + 二维码验证）
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│   ├── nlp/                # 语音指令解析模块
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│   ├── decision/           # 决策 / 任务调度模块
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│   ├── execution/          # 运动执行模块
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│   └── simulation/         # 仿真模块
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>├── core/                   # 核心控制层
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│   ├── state_machine.py    # 状态机
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│   ├── config.py           # 全局配置
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│   ├── logger.py           # 日志模块
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│   └── safety_manager.py   # 安全管理
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>├── tests/                  # 单元 / 集成测试
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>└── main.py                 # 程序入口
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>目录</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬件驱动层</td>
+<td><code>hardware/</code></td>
+<td>封装底层 SDK 通信，屏蔽硬件差异，上层不直接调用原始 SDK</td>
+</tr>
+<tr>
+<td>功能模块层</td>
+<td><code>modules/</code></td>
+<td>各模块为独立 Python 包，可单独测试和替换</td>
+</tr>
+<tr>
+<td>核心控制层</td>
+<td><code>core/</code></td>
+<td>状态机 + 全局配置 + 安全管理，统一编排所有模块</td>
+</tr>
+<tr>
+<td>测试层</td>
+<td><code>tests/</code></td>
+<td>每个模块对应独立测试用例</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">扩展方向</p>
+<p>随着项目推进，硬件驱动层将补充 <code>hand_eye_calib.py</code>（半自动化标定）等文件，核心控制层将补充 <code>safety_manager.py</code>（多级安全管理），各功能模块也会进一步拆分子文件（如 <code>perception/qr_validator.py</code>、<code>execution/delivery_pose.py</code> 等）。</p>
+</div>
+<h2 id="_11">状态机设计<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<p>状态机是系统全局运行的核心控制逻辑。机械臂默认处于待机状态，只有收到有效指令才会动作，这与医疗场景的安全性要求高度匹配。</p>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; Idle: 系统启动
+    Idle --&gt; Listen: 检测到语音/手势唤醒
+    Listen --&gt; Parse: 采集到有效指令
+    Parse --&gt; Execute: 指令+器械信息验证通过
+    Execute --&gt; Reset: 任务完成/中断
+    Reset --&gt; Idle: 回到安全姿态
+    Execute --&gt; Emergency: 触发急停/故障
+    Listen --&gt; Emergency: 触发急停/故障
+    Parse --&gt; Emergency: 触发急停/故障
+    Emergency --&gt; Idle: 故障排除后复位</code></pre>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>触发条件</th>
+<th>主要动作</th>
+<th>退出条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Idle（待机）</td>
+<td>系统启动 / 复位完成</td>
+<td>机械臂保持安全姿态，低功耗监听</td>
+<td>语音或手势唤醒信号</td>
+</tr>
+<tr>
+<td>Listen（监听）</td>
+<td>唤醒信号触发</td>
+<td>麦克风采集声音，视觉检测指令手势</td>
+<td>采集到有效指令</td>
+</tr>
+<tr>
+<td>Parse（解析）</td>
+<td>有效指令输入</td>
+<td>NLP 解析器械名称，视觉确认器械位置，生成运动路径</td>
+<td>指令和器械信息验证通过</td>
+</tr>
+<tr>
+<td>Execute（执行）</td>
+<td>路径规划完成</td>
+<td>调用 CR5AF SDK 完成夹取、递送、归位，全程力控防碰撞</td>
+<td>任务完成或中断</td>
+</tr>
+<tr>
+<td>Reset（复位）</td>
+<td>任务完成 / 中断</td>
+<td>机械臂回到待机姿态</td>
+<td>到达安全姿态</td>
+</tr>
+<tr>
+<td>Emergency（急停）</td>
+<td>碰撞 / 故障 / 急停信号</td>
+<td>立即停止运动，进入安全模式</td>
+<td>故障排除后手动复位</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">异常转移</p>
+<p>Listen、Parse、Execute 三个状态均可在检测到急停信号或故障时直接跳转到 Emergency 状态。安全机制详见 <a href="../../modules/execution/safety_strategy/">安全策略</a>。</p>
+</div>
+<h2 id="_12">模块解耦设计<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<p>系统通过三层解耦架构实现模块的独立开发、独立测试和灵活替换。</p>
+<h3 id="_13">硬件驱动层<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<p>仅负责底层通信，封装越疆 SDK 的 <code>move_joint</code>、<code>move_line</code>、<code>set_force</code> 等接口。上层模块不直接调用 SDK，而是调用这个封装层，从而屏蔽硬件细节。详见 <a href="../../modules/execution/dobot_cr5_control/">CR5 控制接口</a>。</p>
+<h3 id="_14">功能模块层<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
+<p>每个模块（感知、NLP、决策、执行、仿真）是独立的 Python 包，模块间通过定义好的接口通信。例如更换语音识别模型时，只需替换 <code>modules/nlp/</code> 下的代码，不影响感知或执行模块。</p>
+<h3 id="_15">核心控制层<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
+<p>状态机和全局配置是核心控制层的核心，保证所有模块遵循统一的状态流转和参数规范。安全管理模块负责全局的碰撞检测、急停响应和权限控制。</p>
+<div class="admonition tip">
+<p class="admonition-title">设计原则</p>
+<p>模块间通过接口通信，不直接引用内部实现。任何模块可被等价替换而不影响其他模块。这与传统嵌入式开发的紧耦合模式截然不同，更适合多人协作和迭代优化。</p>
+</div>
 
 
 
@@ -2857,11 +3141,10 @@
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
+    <div class="md-copyright__highlight">
+      SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18
+    </div>
   
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
   
 </div>
       
@@ -2878,7 +3161,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

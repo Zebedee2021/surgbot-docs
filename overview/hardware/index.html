@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -685,10 +689,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="机械臂">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        机械臂开发接口
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         视觉传感器
@@ -699,7 +720,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         手术室环境
@@ -2544,10 +2565,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="机械臂">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        机械臂开发接口
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         视觉传感器
@@ -2558,7 +2596,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         手术室环境
@@ -2628,11 +2666,19 @@
 <tbody>
 <tr>
 <td>型号</td>
-<td>越疆（Dobot）CR5 系列协作机械臂</td>
+<td>越疆 CR5AF（CR5 系列力控版本）协作机械臂</td>
+</tr>
+<tr>
+<td>负载</td>
+<td>5kg</td>
 </tr>
 <tr>
 <td>自由度</td>
 <td>6 轴</td>
+</tr>
+<tr>
+<td>重复定位精度</td>
+<td>±0.02mm</td>
 </tr>
 <tr>
 <td>末端执行器</td>
@@ -2640,7 +2686,11 @@
 </tr>
 <tr>
 <td>控制方式</td>
-<td>Python SDK (TCP)</td>
+<td>Python/C++/C# SDK (TCP/IP, 端口 8080)</td>
+</tr>
+<tr>
+<td>力控特性</td>
+<td>柔顺拖动示教、恒力控制、碰撞检测</td>
 </tr>
 <tr>
 <td>安全特性</td>
@@ -2648,7 +2698,42 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_4">视觉传感器<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h3 id="_4">机械臂开发接口<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SDK 语言</td>
+<td>Python / C++ / C#</td>
+</tr>
+<tr>
+<td>通信协议</td>
+<td>TCP/IP</td>
+</tr>
+<tr>
+<td>默认端口</td>
+<td>8080</td>
+</tr>
+<tr>
+<td>ROS 支持</td>
+<td>ROS1 / ROS2</td>
+</tr>
+<tr>
+<td>推荐操作系统</td>
+<td>Ubuntu 20.04 / 22.04</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">项目选型</p>
+<p>当前项目采用 <strong>Python SDK + TCP 直连</strong> 方案，运行于 Ubuntu Linux 服务器，通过 VS Code Remote-SSH 进行远程开发。详见 <a href="../../guides/env_setup/">开发环境搭建</a>。</p>
+</div>
+<h2 id="_5">视觉传感器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2670,7 +2755,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_5">手术室环境<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_6">手术室环境<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>根据现场照片，雄安宣武医院手术室（神经外科）配备：</p>
 <ul>
 <li>蔡司手术显微镜</li>
@@ -2717,11 +2802,10 @@
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
+    <div class="md-copyright__highlight">
+      SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18
+    </div>
   
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
   
 </div>
       
@@ -2738,7 +2822,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

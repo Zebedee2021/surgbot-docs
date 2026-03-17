@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -2472,6 +2476,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#vs-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VS Code 远程开发配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VS Code 远程开发配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#remote-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote-SSH 连接
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        调试配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自动化任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#gpu" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2483,7 +2537,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         常见问题
@@ -2518,6 +2572,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开发模式说明
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2653,6 +2718,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#vs-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VS Code 远程开发配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VS Code 远程开发配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#remote-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote-SSH 连接
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        调试配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自动化任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#gpu" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2664,7 +2779,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         常见问题
@@ -2699,6 +2814,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开发模式说明
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2778,6 +2904,43 @@
 <h3 id="3">3. 验证环境<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>scripts/check_gpu_env.py
 </code></pre></div>
+<h2 id="vs-code">VS Code 远程开发配置<a class="headerlink" href="#vs-code" title="Permanent link">&para;</a></h2>
+<p>项目采用 VS Code Remote-SSH 连接工控机/服务器进行远程开发，在本地编辑代码，实时同步到远程环境。</p>
+<h3 id="remote-ssh">Remote-SSH 连接<a class="headerlink" href="#remote-ssh" title="Permanent link">&para;</a></h3>
+<ol>
+<li>在 VS Code 中安装 <strong>Remote - SSH</strong> 插件</li>
+<li>在本地 <code>~/.ssh/config</code> 中添加服务器配置：</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Host surgbot-server
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    HostName &lt;服务器IP&gt;
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    User &lt;用户名&gt;
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    Port 22
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    IdentityFile ~/.ssh/id_rsa
+</code></pre></div>
+<ol>
+<li>通过 VS Code 左下角「远程连接」按钮选择目标服务器，即可在本地 VS Code 中直接编辑服务器上的代码</li>
+</ol>
+<h3 id="_4">调试配置<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>在 <code>.vscode/launch.json</code> 中配置 Python 调试入口，可直接在 VS Code 中打断点调试机械臂运动。</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">机械臂运动调试</label><label for="__tabbed_2_2">模块单独调试</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>配置 Python 调试入口指向 <code>main.py</code> 或机械臂运动控制脚本，可在运动规划、力控等关键代码行设置断点，实时观察关节角度和末端位姿。</p>
+</div>
+<div class="tabbed-block">
+<p>各功能模块（感知、NLP、决策）可独立启动调试，无需启动完整系统。在 <code>launch.json</code> 中为各模块配置独立的调试入口。</p>
+</div>
+</div>
+</div>
+<h3 id="_5">自动化任务<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>通过 <code>.vscode/tasks.json</code> 配置常用操作，使用 <code>Ctrl+Shift+B</code> 快捷键一键执行：</p>
+<ul>
+<li><strong>构建环境</strong> — 安装/更新依赖</li>
+<li><strong>运行测试</strong> — 执行单元测试和集成测试</li>
+<li><strong>部署到机械臂</strong> — 将代码同步到机械臂工控机</li>
+<li><strong>启动仿真</strong> — 启动 Isaac Sim 仿真环境</li>
+</ul>
+<p>项目目录结构详见 <a href="../../overview/architecture/#程序框架结构">系统架构 - 程序框架结构</a>。</p>
 <h2 id="gpu">GPU 环境检查<a class="headerlink" href="#gpu" title="Permanent link">&para;</a></h2>
 <p>确保以下组件正确安装：</p>
 <ul>
@@ -2785,11 +2948,43 @@
 <li>PyTorch（支持 GPU）</li>
 <li>各模块专属依赖</li>
 </ul>
-<h2 id="_4">常见问题<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_6">常见问题<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <h3 id="cuda">CUDA 版本不匹配<a class="headerlink" href="#cuda" title="Permanent link">&para;</a></h3>
 <p>确认 PyTorch 安装版本与服务器 CUDA 版本对应。</p>
 <h3 id="egl-glx">EGL / GLX 渲染问题<a class="headerlink" href="#egl-glx" title="Permanent link">&para;</a></h3>
 <p>OpenVLA + LIBERO 评测需要图形渲染支持，服务器端需要配置 EGL 或 GLX。</p>
+<h2 id="_7">开发模式说明<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>本项目采用的开发模式与传统嵌入式开发有本质区别：</p>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>本项目</th>
+<th>传统嵌入式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开发模式</td>
+<td>Linux + Python 服务化 + 事件驱动</td>
+<td>裸机/RTOS + C 中断驱动 + 循环轮询</td>
+</tr>
+<tr>
+<td>模块耦合</td>
+<td>独立 Python 包，可单独测试和替换</td>
+<td>紧耦合，改一处影响全局</td>
+</tr>
+<tr>
+<td>调试方式</td>
+<td>VS Code Remote-SSH + 断点调试 + 日志</td>
+<td>串口 / 仿真器 / JTAG</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">转型提示</p>
+<p>对于有嵌入式开发背景的团队成员，需要适应服务化、模块化的开发思路。核心区别在于：每个模块是独立进程/包，通过接口通信而非共享内存；调试使用 VS Code 远程断点而非串口打印。</p>
+</div>
 
 
 
@@ -2824,11 +3019,10 @@
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
+    <div class="md-copyright__highlight">
+      SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18
+    </div>
   
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
   
 </div>
       
@@ -2845,7 +3039,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
