@@ -37,6 +37,7 @@ extra:
 extra_css:
   - stylesheets/nav.css
 
+
 copyright: "SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18"
 
 plugins:
