@@ -1,5 +1,7 @@
 # v2 固定位置模式方案
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Zebedee2021/surgbot-docs/blob/main/notebooks/v2_simulation.ipynb)
+
 !!! tip "活文档"
     本页面记录 v2 固定位置模式的技术方案与实现进展。**最近更新：2026-03-18**
 

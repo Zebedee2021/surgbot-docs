@@ -40,6 +40,6 @@ graph LR
 - [项目简介](overview/introduction.md) - 项目背景与目标
 - [系统架构](overview/architecture.md) - 技术架构设计
 - [人机协同方案](overview/human_robot_collab.md) - 机器人与护士如何配合
-- [v2 固定位置模式方案](progress/v2_fixed_position.md) - 五一演示版技术方案
+- [v2 固定位置模式方案](progress/v2_fixed_position.md) - 五一演示版技术方案 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Zebedee2021/surgbot-docs/blob/main/notebooks/v2_simulation.ipynb)
 - [2026年2月现场测试](progress/field_test_202602.md) - 现场测试问题总结
 - [操作指南](guides/git_quickstart.md) - Git 入门与协作规范
