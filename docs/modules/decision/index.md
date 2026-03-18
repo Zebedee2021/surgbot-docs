@@ -39,3 +39,31 @@ graph LR
 - [OpenVLA 进展](openvla_progress.md)
 - [LIBERO 仿真评测](libero_eval.md)
 - [数据流水线](data_pipeline.md)
+
+---
+
+## 待决策问题
+
+!!! question "需要团队讨论确定"
+
+| 编号 | 问题 | 备选方案 | 状态 |
+|------|------|---------|------|
+| D-DC-01 | LIBERO 评测"稳定性"如何定义？多少次运行、成功率多少算稳定？ | A: 连续 10 次成功率 ≥70% / B: 50 次平均 ≥60% / C: 自定义标准 | ⬚待讨论 |
+| D-DC-02 | Sim2Real 优先走 Isaac Sim 还是直接真机迭代？ | A: Isaac Sim 先行 / B: 直接真机 / C: 双线并进 | ⬚待讨论 |
+
+## 已知瓶颈
+
+!!! warning "当前阻碍进展的问题"
+
+| 瓶颈 | 影响 | 关联问题 | 缓解方向 |
+|------|------|---------|---------|
+| LIBERO 评测稳定性待验证 | 无法形成可靠基线，影响后续迁移决策 | [ISS-10](../../progress/issue_tracker.md) | 定义评测标准 + 多轮重复实验 |
+| 单卡 48GB 显存限制 | 限制模型规模和 batch size | [ISS-11](../../progress/issue_tracker.md) | 模型量化 / 梯度检查点 / 多卡并行 |
+
+## 本周行动
+
+> 更新日期：2026-03-18
+
+- [ ] 定义 LIBERO 评测稳定性标准并文档化
+- [ ] 在 libero_spatial 上运行 10+ 次评测，记录成功率方差
+- [ ] 评估 OpenVLA 在 48GB 显存下的最大 batch size

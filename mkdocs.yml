@@ -62,12 +62,15 @@ markdown_extensions:
 
 nav:
   - 首页: index.md
-  - 项目总览:
+  - 项目背景:
     - 项目简介: overview/introduction.md
-    - 系统架构: overview/architecture.md
     - 团队成员: overview/team.md
     - 硬件平台: overview/hardware.md
+  - 系统设计:
+    - 系统架构: overview/architecture.md
     - 人机协同方案: overview/human_robot_collab.md
+    - 模块接口规范: overview/interfaces.md
+    - 系统安全约束: overview/safety_constraints.md
   - 模块文档:
     - 感知模块:
       - 概述: modules/perception/index.md
@@ -94,6 +97,8 @@ nav:
       - Isaac Sim 环境搭建: modules/simulation/isaac_sim_setup.md
       - 虚拟手术室方案: modules/simulation/surgery_room_sim.md
   - 项目进展:
+    - Sim2Real 仪表盘: progress/sim2real_dashboard.md
+    - 全局问题追踪: progress/issue_tracker.md
     - 2026年2月现场测试: progress/field_test_202602.md
     - OpenVLA 阶段进展: progress/openvla_status.md
     - 里程碑: progress/milestones.md
