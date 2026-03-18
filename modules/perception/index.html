@@ -1743,6 +1743,8 @@
       
         
       
+        
+      
     
     
     
@@ -1859,6 +1861,34 @@
     
   
     2026年2月现场测试
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../progress/v2_fixed_position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2 固定位置模式
   
 
     
@@ -2775,6 +2805,10 @@
     ORI --&gt; CORR
     CORR --&gt; OUT[输出: 夹取坐标 + 方向]</code></pre>
 <h2 id="_4">当前状态<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">v2 方案影响</p>
+<p>v2 固定位置模式下，感知模块的 YOLO 检测和手眼标定为<strong>可选</strong>功能。固定位置模式完全绕过感知链路，直接使用示教配置坐标。YOLO 模式保留为切换选项，支持未来精度提升后回归。详见：<a href="../../progress/v2_fixed_position/">v2 固定位置模式方案</a></p>
+</div>
 <ul>
 <li>YOLO 器械检测：基本可用，但存在误识别问题（如将托盘外物体识别为器械）</li>
 <li>手眼标定：流程可行但繁琐（约1小时/次），需优化为半自动化</li>
@@ -2895,7 +2929,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18
+      SurgBot Team &mdash; 文档版本 v0.3.0 &mdash; 最近更新 2026-03-18
     </div>
   
   

@@ -1743,6 +1743,8 @@
       
         
       
+        
+      
     
     
     
@@ -1859,6 +1861,34 @@
     
   
     2026年2月现场测试
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../progress/v2_fixed_position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2 固定位置模式
   
 
     
@@ -2793,10 +2823,18 @@
 <td>参数配置 GUI</td>
 <td>现场参数调节界面</td>
 </tr>
+<tr>
+<td>固定位置模式</td>
+<td>v2: 基于示教配置的器械定位（绕过 YOLO）</td>
+</tr>
 </tbody>
 </table>
 <h2 id="_4">当前问题<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>根据 2026 年 2 月现场测试反馈：</p>
+<div class="admonition success">
+<p class="admonition-title">v2 方案进展</p>
+<p>针对 Z 轴高度不一致（ISS-03）和参数配置（ISS-02），v2 固定位置模式方案通过 instruments.ini 配置每个器械独立坐标，已完成方案设计。详见：<a href="../../progress/v2_fixed_position/">v2 固定位置模式方案</a></p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">关键问题</p>
 <ol>
@@ -2833,13 +2871,13 @@
 <td>D-EX-01</td>
 <td>Z 轴高度补偿方案选型？</td>
 <td>A: 固定偏移量查表 / B: 力控自适应下压 / C: 深度相机实时测量</td>
-<td>⬚待讨论</td>
+<td>✅v2采用A（固定偏移量+示教录入）</td>
 </tr>
 <tr>
 <td>D-EX-02</td>
 <td>参数配置 GUI 工具选型？</td>
 <td>A: PyQt 桌面端 / B: Web 界面 / C: 命令行配置文件</td>
-<td>⬚待讨论</td>
+<td>✅v2先用C（instruments.ini），GUI后续迭代</td>
 </tr>
 </tbody>
 </table>
@@ -2888,8 +2926,10 @@
 <p>更新日期：2026-03-18</p>
 </blockquote>
 <ul>
-<li>[ ] 调研 Z 轴补偿方案，准备技术选型对比</li>
-<li>[ ] 设计参数配置 GUI 的需求文档</li>
+<li>[x] Z 轴补偿方案选型 → v2 固定位置模式（每器械独立坐标）</li>
+<li>[x] 参数配置方案选型 → v2 instruments.ini 配置文件</li>
+<li>[ ] 实现 v2 固定位置模式代码（RobotController + Constants）</li>
+<li>[ ] 实现示教工具 teach_tool.py</li>
 <li>[ ] 实现执行前目标位姿合理性校验</li>
 </ul>
 
@@ -2927,7 +2967,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18
+      SurgBot Team &mdash; 文档版本 v0.3.0 &mdash; 最近更新 2026-03-18
     </div>
   
   

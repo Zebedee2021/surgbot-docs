@@ -16,7 +16,7 @@
         <link rel="prev" href="../issue_tracker/">
       
       
-        <link rel="next" href="../openvla_status/">
+        <link rel="next" href="../v2_fixed_position/">
       
       
         
@@ -1721,6 +1721,8 @@
       
         
       
+        
+      
     
     
     
@@ -2018,10 +2020,49 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2 改进方案
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v2_fixed_position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2 固定位置模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2934,6 +2975,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2 改进方案
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3054,6 +3106,52 @@
 <p class="admonition-title">使用说明</p>
 <p>此映射表可作为模块改进的优先级参考。每类问题的改进方案应在对应模块文档中详细记录。</p>
 </div>
+<hr />
+<h2 id="v2">v2 改进方案<a class="headerlink" href="#v2" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>详见：<a href="../v2_fixed_position/">v2 固定位置模式方案</a></p>
+</blockquote>
+<p>针对上述现场测试问题，v2 方案采用<strong>固定支架 + 示教位置</strong>策略：器械放入固定槽位后一次示教录入坐标，后续通过配置文件替代实时 YOLO 检测，从根本上解决 5 项核心问题。</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>v2 对策</th>
+<th>预期效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#1 标定繁琐</td>
+<td>示教工具一次录入</td>
+<td>标定时间从 1 小时降至 5 分钟</td>
+</tr>
+<tr>
+<td>#2 参数改代码</td>
+<td>instruments.ini 集中配置</td>
+<td>无需改代码即可调参</td>
+</tr>
+<tr>
+<td>#3 Z 轴不一致</td>
+<td>每器械独立 Z 坐标</td>
+<td>高度精确可控（±1mm）</td>
+</tr>
+<tr>
+<td>#4 夹取偏差</td>
+<td>精确示教坐标</td>
+<td>消除识别误差</td>
+</tr>
+<tr>
+<td>#6 识别困难</td>
+<td>固定位置绕过 YOLO</td>
+<td>不依赖视觉识别</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">目标交付</p>
+<p>v2 固定位置模式目标于 <strong>2026 年 5 月 1 日前</strong>交付全流程可交互演示版本。</p>
+</div>
 
 
 
@@ -3089,7 +3187,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18
+      SurgBot Team &mdash; 文档版本 v0.3.0 &mdash; 最近更新 2026-03-18
     </div>
   
   
