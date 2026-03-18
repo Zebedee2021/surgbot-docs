@@ -33,8 +33,9 @@ with DH-3 gripper and 4 surgical instruments.
 |-----------|--------|
 | CR5 MJCF model (from official URDF) | Loaded from STL meshes |
 | DH-3 parallel gripper | 2-finger, slide joints |
-| 4 surgical instruments | Scalpel, tweezers, scissors, needle holder |
-| Complete scene | Table + tray + delivery marker |
+| 4 surgical instruments | Scalpel (yellow), tweezers (gold), scissors (green), needle holder (blue) |
+| Binocular camera | RealSense D435i style, on stand |
+| Complete scene | Table + tray (w/ edges) + camera + delivery marker |
 
 > Run all cells in order. First cell installs dependencies (~30s)."""))
 
@@ -45,7 +46,7 @@ cells.append(code("""# Cell 1: Install dependencies
 import sys
 print(f"Python {sys.version}")
 import mujoco; print(f"MuJoCo {mujoco.__version__}")
-import mediapy; print("mediapy OK")
+import mediapy as media; print("mediapy OK")
 import numpy as np; print(f"NumPy {np.__version__}")"""))
 
 # ── Cell 2: Clone repo & load model ──
@@ -182,7 +183,7 @@ data.qpos[:] = model.key_qpos[key_id]
 mujoco.mj_forward(model, data)
 
 frame = render_frame(data, distance=0.6, elevation=-30, azimuth=160,
-                     lookat=[0.3, -0.11, 0.76])
+                     lookat=[0.3, -0.1, 0.76])
 ax.imshow(frame)
 ax.set_title('Instrument Tray Close-up (4 Surgical Instruments)', fontsize=14, fontweight='bold')
 ax.axis('off')
