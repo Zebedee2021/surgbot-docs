@@ -233,61 +233,103 @@ for step in range(n_steps):
 print(f"Captured {len(frames)} frames")
 media.show_video(frames, fps=fps, title="Reset -> Target Motion")"""))
 
-# ── Cell 8: Gripper open/close animation ──
-cells.append(code("""# Cell 8: Gripper open/close cycle animation
-frames_g = []
+# ── Cell 8: Pick-and-place demo - grasp scalpel from tray ──
+cells.append(code("""# Cell 8: Pick-and-place demo - grasp scalpel from instrument tray
+frames_pick = []
 
-# Move to reset pose first and stabilize
+# === Phase 0: Reset everything, stabilize at reset pose with gripper open ===
 mujoco.mj_resetData(model, data)
 key_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, 'reset')
 data.qpos[:] = model.key_qpos[key_id]
 data.ctrl[:] = model.key_ctrl[key_id]
 for i in range(6):
     data.ctrl[i] = RESET_RAD[i]
-# Start with gripper open
-data.ctrl[6] = 0.03
+data.ctrl[6] = 0.03  # gripper open
 data.ctrl[7] = 0.03
 for _ in range(1000):
     mujoco.mj_step(model, data)
 
-# Camera looks at TCP/gripper area
+# Get gripper TCP position (this is where the pads meet)
 tcp_id = model.site("gripper_tcp").id
+ee_id = model.site("ee_site").id
+
+# Move the scalpel to be between the gripper pads
+# (simulate the arm having already reached the instrument)
+scalpel_jnt = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, 'scalpel_free')
+scalpel_qadr = model.jnt_qposadr[scalpel_jnt]
+
+# Position scalpel at TCP, oriented along gripper Y-axis (horizontal in pads)
 tcp_pos = data.site_xpos[tcp_id].copy()
+data.qpos[scalpel_qadr:scalpel_qadr+3] = tcp_pos
+# Quaternion to lay scalpel across the pads (rotate 90 deg around Z)
+data.qpos[scalpel_qadr+3:scalpel_qadr+7] = [0.707, 0, 0, 0.707]
+# Zero out scalpel velocity
+scalpel_dofadr = model.jnt_dofadr[scalpel_jnt]
+data.qvel[scalpel_dofadr:scalpel_dofadr+6] = 0
+mujoco.mj_forward(model, data)
 
-# Record one static frame first (open state)
-for _ in range(5):
-    frames_g.append(render_frame(data, distance=0.45, elevation=-15,
-                                 azimuth=135, lookat=list(tcp_pos)))
+# Camera: medium view showing gripper and tray area
+cam_lookat = [tcp_pos[0], tcp_pos[1], tcp_pos[2] - 0.05]
 
-# Phase 1: Close gripper (60 frames, plenty of sim time)
-for step in range(60):
-    data.ctrl[6] = 0.0
+# === Phase 1: Show open gripper with scalpel positioned (pre-grasp) ===
+print("Phase 1: Pre-grasp position...")
+for _ in range(8):
+    for __ in range(20):
+        mujoco.mj_step(model, data)
+    frames_pick.append(render_frame(data, distance=0.5, elevation=-20,
+                                    azimuth=150, lookat=cam_lookat))
+
+# === Phase 2: Close gripper to grasp the scalpel ===
+print("Phase 2: Closing gripper...")
+for step in range(50):
+    data.ctrl[6] = 0.0  # close
     data.ctrl[7] = 0.0
-    for _ in range(30):  # 30 steps per frame = 0.06s per frame
-        mujoco.mj_step(model, data)
-    if step % 2 == 0:
-        frames_g.append(render_frame(data, distance=0.45, elevation=-15,
-                                     azimuth=135, lookat=list(tcp_pos)))
-
-# Hold closed
-for _ in range(5):
-    for __ in range(30):
-        mujoco.mj_step(model, data)
-    frames_g.append(render_frame(data, distance=0.45, elevation=-15,
-                                 azimuth=135, lookat=list(tcp_pos)))
-
-# Phase 2: Open gripper again
-for step in range(60):
-    data.ctrl[6] = 0.03
-    data.ctrl[7] = 0.03
     for _ in range(30):
         mujoco.mj_step(model, data)
     if step % 2 == 0:
-        frames_g.append(render_frame(data, distance=0.45, elevation=-15,
-                                     azimuth=135, lookat=list(tcp_pos)))
+        frames_pick.append(render_frame(data, distance=0.5, elevation=-20,
+                                        azimuth=150, lookat=cam_lookat))
 
-print(f"Captured {len(frames_g)} frames")
-media.show_video(frames_g, fps=15, title="Gripper Open/Close Cycle")"""))
+# === Phase 3: Hold and confirm grip (close-up) ===
+print("Phase 3: Holding scalpel...")
+for _ in range(10):
+    for __ in range(30):
+        mujoco.mj_step(model, data)
+    frames_pick.append(render_frame(data, distance=0.35, elevation=-15,
+                                    azimuth=140, lookat=cam_lookat))
+
+# === Phase 4: Lift arm (move toward target pose) while holding scalpel ===
+print("Phase 4: Lifting with scalpel...")
+# Interpolate from reset to a lifted pose (midway to target)
+LIFT_RAD = [RESET_RAD[i]*0.5 + TARGET_RAD[i]*0.5 for i in range(6)]
+n_lift = 60
+for step in range(n_lift):
+    t = step / (n_lift - 1)
+    for i in range(6):
+        data.ctrl[i] = RESET_RAD[i] * (1 - t) + LIFT_RAD[i] * t
+    data.ctrl[6] = 0.0  # keep gripping
+    data.ctrl[7] = 0.0
+    for _ in range(20):
+        mujoco.mj_step(model, data)
+    if step % 2 == 0:
+        # Pull camera back as arm lifts
+        cur_tcp = data.site_xpos[tcp_id].copy()
+        frames_pick.append(render_frame(data, distance=0.6 + t*0.8, elevation=-20,
+                                        azimuth=150 - t*15,
+                                        lookat=[cur_tcp[0], cur_tcp[1], cur_tcp[2] - 0.05]))
+
+# === Phase 5: Hold final pose ===
+for _ in range(8):
+    for __ in range(30):
+        mujoco.mj_step(model, data)
+    cur_tcp = data.site_xpos[tcp_id].copy()
+    frames_pick.append(render_frame(data, distance=1.4, elevation=-20,
+                                    azimuth=135,
+                                    lookat=[cur_tcp[0], cur_tcp[1], cur_tcp[2] - 0.1]))
+
+print(f"\\nCaptured {len(frames_pick)} frames")
+print("Sequence: pre-grasp -> close gripper -> hold -> lift with scalpel")
+media.show_video(frames_pick, fps=15, title="Pick Scalpel from Tray")"""))
 
 # ── Cell 9: Model summary ──
 cells.append(code("""# Cell 9: Complete model summary

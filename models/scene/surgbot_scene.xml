@@ -195,7 +195,7 @@
 
                     <!-- TCP site (tool center point, between pads) -->
                     <site name="gripper_tcp" pos="0 0 0.1"
-                          size="0.008" rgba="1 1 0 0.6"/>
+                          size="0.002" rgba="1 1 0 0.3"/>
                   </body>
                   <!-- ======== End Gripper ======== -->
 
