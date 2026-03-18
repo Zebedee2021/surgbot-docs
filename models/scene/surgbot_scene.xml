@@ -133,11 +133,14 @@
                   <site name="ee_site" pos="0 0 0" size="0.01" rgba="1 0 0 0.5"/>
 
                   <!-- ======== DH-3 Gripper (mounted on Link6) ======== -->
+                  <!-- Gripper extends in +Z direction of Link6 frame   -->
+                  <!-- (toward tool side, away from arm body)            -->
+
                   <!-- Connector flange between Link6 and gripper -->
                   <geom name="gripper_flange" type="cylinder" size="0.032 0.015"
-                        pos="0 0 -0.015" rgba="0.25 0.25 0.25 1"/>
+                        pos="0 0 0.015" rgba="0.25 0.25 0.25 1"/>
 
-                  <body name="gripper_base" pos="0 0 -0.045">
+                  <body name="gripper_base" pos="0 0 0.045">
                     <!-- Housing (120x90x40mm, bright blue) -->
                     <geom name="gripper_housing" type="box" size="0.06 0.045 0.02"
                           mass="0.3" material="gripper_blue"/>
@@ -147,19 +150,19 @@
                           contype="0" conaffinity="0"/>
 
                     <!-- Left finger assembly -->
-                    <body name="gripper_left_finger" pos="0 0.02 -0.02">
+                    <body name="gripper_left_finger" pos="0 0.02 0.02">
                       <joint name="gripper_left" type="slide" axis="0 1 0"
                              range="0 0.03" damping="2"/>
                       <!-- Finger bracket (metal) -->
                       <geom name="gripper_left_bracket" type="box"
-                            size="0.015 0.012 0.015" pos="0 0 -0.01"
+                            size="0.015 0.012 0.015" pos="0 0 0.01"
                             mass="0.02" rgba="0.6 0.6 0.6 1"/>
                       <!-- Finger body (elongated, bright red) -->
                       <geom name="gripper_left_body" type="box"
-                            size="0.015 0.012 0.04" pos="0 0 -0.055"
+                            size="0.015 0.012 0.04" pos="0 0 0.055"
                             mass="0.05" rgba="0.85 0.15 0.1 1"/>
                       <!-- Finger pad (rubber, dark) -->
-                      <body name="gripper_left_pad" pos="0 -0.012 -0.085">
+                      <body name="gripper_left_pad" pos="0 -0.012 0.085">
                         <geom name="left_pad" type="box"
                               size="0.014 0.005 0.015" mass="0.01"
                               material="rubber_black"
@@ -169,19 +172,19 @@
                     </body>
 
                     <!-- Right finger assembly (mirrored) -->
-                    <body name="gripper_right_finger" pos="0 -0.02 -0.02">
+                    <body name="gripper_right_finger" pos="0 -0.02 0.02">
                       <joint name="gripper_right" type="slide" axis="0 -1 0"
                              range="0 0.03" damping="2"/>
                       <!-- Finger bracket (metal) -->
                       <geom name="gripper_right_bracket" type="box"
-                            size="0.015 0.012 0.015" pos="0 0 -0.01"
+                            size="0.015 0.012 0.015" pos="0 0 0.01"
                             mass="0.02" rgba="0.6 0.6 0.6 1"/>
                       <!-- Finger body (elongated, bright red) -->
                       <geom name="gripper_right_body" type="box"
-                            size="0.015 0.012 0.04" pos="0 0 -0.055"
+                            size="0.015 0.012 0.04" pos="0 0 0.055"
                             mass="0.05" rgba="0.85 0.15 0.1 1"/>
                       <!-- Finger pad (rubber, dark) -->
-                      <body name="gripper_right_pad" pos="0 0.012 -0.085">
+                      <body name="gripper_right_pad" pos="0 0.012 0.085">
                         <geom name="right_pad" type="box"
                               size="0.014 0.005 0.015" mass="0.01"
                               material="rubber_black"
@@ -191,7 +194,7 @@
                     </body>
 
                     <!-- TCP site (tool center point, between pads) -->
-                    <site name="gripper_tcp" pos="0 0 -0.1"
+                    <site name="gripper_tcp" pos="0 0 0.1"
                           size="0.008" rgba="1 1 0 0.6"/>
                   </body>
                   <!-- ======== End Gripper ======== -->
