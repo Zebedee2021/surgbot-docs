@@ -1,0 +1,3849 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="手术器械护士机器助手项目文档">
+      
+      
+        <meta name="author" content="SurgBot Team">
+      
+      
+      
+        <link rel="prev" href="../surgery_room_sim/">
+      
+      
+        <link rel="next" href="../../../progress/sim2real_dashboard/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>MuJoCo 仿真方案 - 手术器械护士机器助手</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/nav.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mujoco" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="手术器械护士机器助手" class="md-header__button md-logo" aria-label="手术器械护士机器助手" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            手术器械护士机器助手
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MuJoCo 仿真方案
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../overview/introduction/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  项目背景
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../overview/architecture/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  系统设计
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../perception/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  模块文档
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../progress/sim2real_dashboard/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  项目进展
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../meeting/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  会议记录
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../testing/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  测试记录
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../members/chen_duanduan/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  成员工作
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../references/paper_list/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  参考资料
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../guides/git_quickstart/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  操作指南
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="手术器械护士机器助手" class="md-nav__button md-logo" aria-label="手术器械护士机器助手" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    手术器械护士机器助手
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目背景
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    项目背景
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目简介
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/team/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    团队成员
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    硬件平台
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    系统设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/human_robot_collab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    人机协同方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块接口规范
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/safety_constraints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统安全约束
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块文档
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块文档
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../perception/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    感知模块
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    感知模块
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../perception/yolo_detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    YOLO 器械检测
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../perception/camera_calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    相机标定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../perception/grasp_algorithm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    夹取点算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../nlp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NLP 模块
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NLP 模块
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nlp/qwen_sft/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qwen2.5 SFT 微调
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nlp/dpo_alignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPO 对齐优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nlp/instrument_vocab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    器械标准化词库
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../decision/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    决策模块
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    决策模块
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decision/openvla_progress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenVLA 进展
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decision/libero_eval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LIBERO 仿真评测
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decision/data_pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据流水线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../execution/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行模块
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行模块
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/dobot_cr5_control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CR5 控制接口
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/motion_planning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    运动规划
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/safety_strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全策略
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    仿真模块
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    仿真模块
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isaac_sim_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Isaac Sim 环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../surgery_room_sim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    虚拟手术室方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MuJoCo 仿真方案
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MuJoCo 仿真方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mujoco" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 为什么选 MuJoCo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 为什么选 MuJoCo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与现有方案的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mujoco_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MuJoCo 的核心优势
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        定位：三层仿真体系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 技术方案
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 技术方案">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-dobot-cr5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Dobot CR5 模型获取与转换
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Dobot CR5 模型获取与转换">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#urdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URDF 来源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#urdf-mjcf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URDF → MJCF 转换流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        转换后需要的调整
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 手术器械模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 场景组装
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 核心仿真控制器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-colab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Colab 集成方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 实施路线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 实施路线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase A: 模型准备
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase B: 控制逻辑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase C: 可视化与集成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 关键挑战与应对
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-isaac-sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 与 Isaac Sim 的协同
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 预期产出
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        相关链接
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目进展
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    项目进展
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../progress/sim2real_dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sim2Real 仪表盘
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../progress/issue_tracker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全局问题追踪
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../progress/field_test_202602/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026年2月现场测试
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../progress/v2_fixed_position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2 固定位置模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../progress/openvla_status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenVLA 阶段进展
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../progress/milestones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    里程碑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../meeting/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    会议记录
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    会议记录
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../meeting/2026/0205_field_review/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026/02/05 现场测试评审
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../testing/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试记录
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    测试记录
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/records/202602_onsite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026年2月现场测试
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    成员工作
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    成员工作
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../members/chen_duanduan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    陈端端
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../members/li_shuya/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    李淑雅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../members/ren_song/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    任松
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../members/tan_wentao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    谭文韬
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考资料
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    参考资料
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../references/paper_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文列表
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../references/related_projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    相关项目
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../references/domain_knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    领域知识
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    操作指南
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    操作指南
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/git_quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git 快速入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/env_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/dataset_management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据集管理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mujoco" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 为什么选 MuJoCo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 为什么选 MuJoCo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与现有方案的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mujoco_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MuJoCo 的核心优势
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        定位：三层仿真体系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 技术方案
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 技术方案">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-dobot-cr5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Dobot CR5 模型获取与转换
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Dobot CR5 模型获取与转换">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#urdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URDF 来源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#urdf-mjcf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URDF → MJCF 转换流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        转换后需要的调整
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 手术器械模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 场景组装
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 核心仿真控制器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-colab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Colab 集成方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 实施路线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 实施路线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase A: 模型准备
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase B: 控制逻辑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase C: 可视化与集成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 关键挑战与应对
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-isaac-sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 与 Isaac Sim 的协同
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 预期产出
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        相关链接
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="mujoco">MuJoCo 仿真方案建议<a class="headerlink" href="#mujoco" title="Permanent link">&para;</a></h1>
+<p><a href="https://colab.research.google.com/github/Zebedee2021/surgbot-docs/blob/main/notebooks/mujoco_demo.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<div class="admonition tip">
+<p class="admonition-title">方案状态</p>
+<p><strong>Phase A 已完成</strong> — 模型准备就绪，Colab 可演示。最近更新：2026-03-18</p>
+</div>
+<h2 id="1-mujoco">1. 为什么选 MuJoCo<a class="headerlink" href="#1-mujoco" title="Permanent link">&para;</a></h2>
+<h3 id="_1">与现有方案的对比<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Colab Mock 仿真（已完成）</th>
+<th>Isaac Sim（进行中）</th>
+<th>MuJoCo（本提案）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>物理引擎</strong></td>
+<td>无（纯逻辑模拟）</td>
+<td>PhysX 5.x</td>
+<td>MuJoCo 3.x</td>
+</tr>
+<tr>
+<td><strong>安装门槛</strong></td>
+<td>零安装（浏览器）</td>
+<td>需 RTX GPU + NVIDIA 驱动</td>
+<td><code>pip install mujoco</code>，CPU 即可</td>
+</tr>
+<tr>
+<td><strong>Colab 支持</strong></td>
+<td>原生支持</td>
+<td>不支持</td>
+<td>支持（官方提供 Colab 教程）</td>
+</tr>
+<tr>
+<td><strong>接触力学</strong></td>
+<td>不支持</td>
+<td>支持</td>
+<td>精确接触建模（凸优化求解器）</td>
+</tr>
+<tr>
+<td><strong>渲染</strong></td>
+<td>Matplotlib 静态</td>
+<td>Omniverse 高保真</td>
+<td>内置 OpenGL + 离屏渲染</td>
+</tr>
+<tr>
+<td><strong>URDF 支持</strong></td>
+<td>不适用</td>
+<td>原生支持</td>
+<td>支持（URDF → MJCF 自动转换）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>逻辑验证 / 快速演示</td>
+<td>高保真视觉仿真 / Sim2Real</td>
+<td>控制算法验证 / 力学仿真 / RL</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>低</td>
+<td>高</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>开源协议</strong></td>
+<td>—</td>
+<td>商业（免费教育版）</td>
+<td>Apache 2.0 完全开源</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mujoco_1">MuJoCo 的核心优势<a class="headerlink" href="#mujoco_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>精确接触力学</strong>：基于凸优化的接触求解器，适合模拟夹爪抓取器械时的力反馈</li>
+<li><strong>轻量级</strong>：纯 CPU 可运行，无需 GPU，适合在 Colab 和普通笔记本上开发</li>
+<li><strong>Colab 原生兼容</strong>：Google DeepMind 官方维护 Colab 教程和 MuJoCo Playground</li>
+<li><strong>与现有 Mock 仿真互补</strong>：Mock 验证逻辑流程，MuJoCo 验证物理可行性</li>
+<li><strong>Python API 成熟</strong>：<code>mujoco</code> 包直接 pip 安装，API 清晰</li>
+</ol>
+<h3 id="_2">定位：三层仿真体系<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Level 0: Colab Mock 仿真（已完成）    → 逻辑验证 / 快速迭代
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Level 1: MuJoCo 物理仿真（本提案）    → 运动验证 / 力学仿真 / Colab 可用
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Level 2: Isaac Sim 高保真仿真（并行）  → 视觉仿真 / Sim2Real 迁移
+</code></pre></div>
+<p>MuJoCo 填补 Level 0 和 Level 2 之间的空白：比 Mock 更真实（有物理引擎），比 Isaac Sim 更轻量（无需 GPU）。</p>
+<h2 id="2">2. 技术方案<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="21-dobot-cr5">2.1 Dobot CR5 模型获取与转换<a class="headerlink" href="#21-dobot-cr5" title="Permanent link">&para;</a></h3>
+<h4 id="urdf">URDF 来源<a class="headerlink" href="#urdf" title="Permanent link">&para;</a></h4>
+<p>Dobot 官方 ROS 仓库提供了 CR 系列 URDF 模型：</p>
+<ul>
+<li>仓库地址：<a href="https://github.com/Dobot-Arm/TCP-IP-ROS-6AXis">Dobot-Arm/TCP-IP-ROS-6AXis</a></li>
+<li>关键路径：<code>dobot_description/urdf/</code> 下包含 CR5 的 URDF 和 mesh 文件</li>
+<li>备选仓库：<a href="https://github.com/hans199904/CR_ROS">hans199904/CR_ROS</a>（含 <code>dobot_description</code> + <code>cr5_moveit</code>）</li>
+</ul>
+<h4 id="urdf-mjcf">URDF → MJCF 转换流程<a class="headerlink" href="#urdf-mjcf" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 方法 1: MuJoCo 内置编译器（推荐）</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mujoco</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># 加载 URDF 并自动转换为 MJCF</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">model</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">MjModel</span><span class="o">.</span><span class="n">from_xml_path</span><span class="p">(</span><span class="s2">&quot;cr5.urdf&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># 保存为 MJCF XML 以便后续编辑</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">mujoco</span><span class="o">.</span><span class="n">mj_saveLastXML</span><span class="p">(</span><span class="s2">&quot;cr5.xml&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 方法 2: 命令行工具</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>-m<span class="w"> </span>mujoco.viewer<span class="w"> </span>--mjcf<span class="w"> </span>cr5.urdf
+</code></pre></div>
+<h4 id="_3">转换后需要的调整<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关节限位</td>
+<td>校验 CR5 六轴关节限位与真实参数一致</td>
+</tr>
+<tr>
+<td>惯性参数</td>
+<td>验证连杆质量、惯量矩阵的合理性</td>
+</tr>
+<tr>
+<td>碰撞体</td>
+<td>简化 mesh 碰撞体为凸包或基本几何体（提升仿真速度）</td>
+</tr>
+<tr>
+<td>执行器</td>
+<td>添加关节电机 <code>&lt;motor&gt;</code> 或位置伺服 <code>&lt;position&gt;</code> 执行器</td>
+</tr>
+<tr>
+<td>夹爪</td>
+<td>添加 DH-3 夹爪模型（平行夹爪，两指联动）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22">2.2 手术器械模型<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<p>对 4 种器械建立简化几何模型（先用基本几何体，后续可替换为精确 mesh）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cm">&lt;!-- instruments.xml - 简化器械模型 --&gt;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">&lt;mujoco&gt;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&lt;worldbody&gt;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">&lt;body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;instrument_rack&quot;</span><span class="w"> </span><span class="na">pos=</span><span class="s">&quot;0.3 -0.1 0.8&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="cm">&lt;!-- 刀柄 (id=0): 圆柱体模拟手柄 --&gt;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">&lt;body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;scalpel_handle&quot;</span><span class="w"> </span><span class="na">pos=</span><span class="s">&quot;0 0 0&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="nt">&lt;joint</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;scalpel_free&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;free&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;cylinder&quot;</span><span class="w"> </span><span class="na">size=</span><span class="s">&quot;0.005 0.06&quot;</span><span class="w"> </span><span class="na">mass=</span><span class="s">&quot;0.05&quot;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">              </span><span class="na">rgba=</span><span class="s">&quot;0.7 0.7 0.7 1&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="cm">&lt;!-- 镊子 (id=1): 细长锥体 --&gt;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">      </span><span class="nt">&lt;body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tweezers&quot;</span><span class="w"> </span><span class="na">pos=</span><span class="s">&quot;0.04 0 0&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="nt">&lt;joint</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tweezers_free&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;free&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;capsule&quot;</span><span class="w"> </span><span class="na">size=</span><span class="s">&quot;0.002 0.07&quot;</span><span class="w"> </span><span class="na">mass=</span><span class="s">&quot;0.03&quot;</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">              </span><span class="na">rgba=</span><span class="s">&quot;0.7 0.7 0.7 1&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">      </span><span class="cm">&lt;!-- 剪刀 (id=2): 交叉体 --&gt;</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">      </span><span class="nt">&lt;body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;scissors&quot;</span><span class="w"> </span><span class="na">pos=</span><span class="s">&quot;0.08 0 0&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">        </span><span class="nt">&lt;joint</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;scissors_free&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;free&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">        </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;capsule&quot;</span><span class="w"> </span><span class="na">size=</span><span class="s">&quot;0.003 0.06&quot;</span><span class="w"> </span><span class="na">mass=</span><span class="s">&quot;0.06&quot;</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">              </span><span class="na">rgba=</span><span class="s">&quot;0.7 0.7 0.7 1&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">      </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">      </span><span class="cm">&lt;!-- 持针钳 (id=3): 粗锥体 --&gt;</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">      </span><span class="nt">&lt;body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;needle_holder&quot;</span><span class="w"> </span><span class="na">pos=</span><span class="s">&quot;0.12 0 0&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">        </span><span class="nt">&lt;joint</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;needle_holder_free&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;free&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">        </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;capsule&quot;</span><span class="w"> </span><span class="na">size=</span><span class="s">&quot;0.004 0.065&quot;</span><span class="w"> </span><span class="na">mass=</span><span class="s">&quot;0.07&quot;</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">              </span><span class="na">rgba=</span><span class="s">&quot;0.7 0.7 0.7 1&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">      </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">    </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">  </span><span class="nt">&lt;/worldbody&gt;</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="nt">&lt;/mujoco&gt;</span>
+</code></pre></div>
+<h3 id="23">2.3 场景组装<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cm">&lt;!-- surgbot_scene.xml - 完整仿真场景 --&gt;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">&lt;mujoco</span><span class="w"> </span><span class="na">model=</span><span class="s">&quot;surgbot_v2&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&lt;compiler</span><span class="w"> </span><span class="na">angle=</span><span class="s">&quot;degree&quot;</span><span class="w"> </span><span class="na">meshdir=</span><span class="s">&quot;meshes/&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&lt;option</span><span class="w"> </span><span class="na">timestep=</span><span class="s">&quot;0.002&quot;</span><span class="w"> </span><span class="na">gravity=</span><span class="s">&quot;0 0 -9.81&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">&lt;default&gt;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">&lt;joint</span><span class="w"> </span><span class="na">damping=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">condim=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">friction=</span><span class="s">&quot;1 0.5 0.005&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="nt">&lt;/default&gt;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">&lt;worldbody&gt;</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="cm">&lt;!-- 地面 --&gt;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;plane&quot;</span><span class="w"> </span><span class="na">size=</span><span class="s">&quot;2 2 0.01&quot;</span><span class="w"> </span><span class="na">rgba=</span><span class="s">&quot;0.9 0.9 0.9 1&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="cm">&lt;!-- 手术台 --&gt;</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nt">&lt;body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;table&quot;</span><span class="w"> </span><span class="na">pos=</span><span class="s">&quot;0 0 0.75&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">      </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;box&quot;</span><span class="w"> </span><span class="na">size=</span><span class="s">&quot;0.5 0.3 0.02&quot;</span><span class="w"> </span><span class="na">rgba=</span><span class="s">&quot;0.3 0.5 0.3 1&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">    </span><span class="cm">&lt;!-- CR5 机械臂底座 --&gt;</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="nt">&lt;include</span><span class="w"> </span><span class="na">file=</span><span class="s">&quot;cr5_robot.xml&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="cm">&lt;!-- 器械支架 + 器械 --&gt;</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="nt">&lt;include</span><span class="w"> </span><span class="na">file=</span><span class="s">&quot;instruments.xml&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">    </span><span class="cm">&lt;!-- 交付点标记 --&gt;</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">    </span><span class="nt">&lt;body</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;delivery_point&quot;</span><span class="w"> </span><span class="na">pos=</span><span class="s">&quot;-0.2 0.3 0.85&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">      </span><span class="nt">&lt;geom</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;cylinder&quot;</span><span class="w"> </span><span class="na">size=</span><span class="s">&quot;0.05 0.005&quot;</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">            </span><span class="na">rgba=</span><span class="s">&quot;0 0.8 0 0.5&quot;</span><span class="w"> </span><span class="na">contype=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">conaffinity=</span><span class="s">&quot;0&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">    </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">  </span><span class="nt">&lt;/worldbody&gt;</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="w">  </span><span class="cm">&lt;!-- 执行器 --&gt;</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="w">  </span><span class="nt">&lt;actuator&gt;</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;j1_ctrl&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;cr5_j1&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;j2_ctrl&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;cr5_j2&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;j3_ctrl&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;cr5_j3&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;j4_ctrl&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;cr5_j4&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;j5_ctrl&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;cr5_j5&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;j6_ctrl&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;cr5_j6&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;gripper_l&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;gripper_left&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;50&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a><span class="w">    </span><span class="nt">&lt;position</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;gripper_r&quot;</span><span class="w"> </span><span class="na">joint=</span><span class="s">&quot;gripper_right&quot;</span><span class="w"> </span><span class="na">kp=</span><span class="s">&quot;50&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a><span class="w">  </span><span class="nt">&lt;/actuator&gt;</span>
+<a id="__codelineno-4-44" name="__codelineno-4-44" href="#__codelineno-4-44"></a>
+<a id="__codelineno-4-45" name="__codelineno-4-45" href="#__codelineno-4-45"></a><span class="w">  </span><span class="cm">&lt;!-- 传感器 --&gt;</span>
+<a id="__codelineno-4-46" name="__codelineno-4-46" href="#__codelineno-4-46"></a><span class="w">  </span><span class="nt">&lt;sensor&gt;</span>
+<a id="__codelineno-4-47" name="__codelineno-4-47" href="#__codelineno-4-47"></a><span class="w">    </span><span class="nt">&lt;force</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;gripper_force&quot;</span><span class="w"> </span><span class="na">site=</span><span class="s">&quot;gripper_site&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-48" name="__codelineno-4-48" href="#__codelineno-4-48"></a><span class="w">    </span><span class="nt">&lt;touch</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;gripper_touch&quot;</span><span class="w"> </span><span class="na">site=</span><span class="s">&quot;gripper_pad&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-4-49" name="__codelineno-4-49" href="#__codelineno-4-49"></a><span class="w">  </span><span class="nt">&lt;/sensor&gt;</span>
+<a id="__codelineno-4-50" name="__codelineno-4-50" href="#__codelineno-4-50"></a><span class="nt">&lt;/mujoco&gt;</span>
+</code></pre></div>
+<h3 id="24">2.4 核心仿真控制器<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mujoco</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">SurgBotMuJoCoSim</span><span class="p">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;MuJoCo 仿真控制器 - 对接 v2 固定位置模式&quot;&quot;&quot;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;surgbot_scene.xml&quot;</span><span class="p">):</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">MjModel</span><span class="o">.</span><span class="n">from_xml_path</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">MjData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>        <span class="c1"># 从 instruments.ini 加载的固定位置（笛卡尔坐标, mm）</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_positions</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>            <span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mf">250.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">120.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">85.2</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">],</span>   <span class="c1"># 刀柄</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>            <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mf">280.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">95.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">82.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">],</span>     <span class="c1"># 镊子</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>            <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mf">310.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">130.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">80.5</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">],</span>    <span class="c1"># 剪刀</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>            <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="mf">340.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">110.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">83.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">],</span>    <span class="c1"># 持针钳</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>        <span class="p">}</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>        <span class="c1"># 复位关节角 (deg)</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">RESET_JOINTS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">32.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">129.1</span><span class="p">,</span> <span class="mf">6.7</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">]</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>        <span class="c1"># 交付关节角 (deg)</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">TARGET_JOINTS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">67.3</span><span class="p">,</span> <span class="mf">112.5</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">]</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move_to_joint_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joint_angles_deg</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;位置伺服：驱动关节到目标角度&quot;&quot;&quot;</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">angle</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joint_angles_deg</span><span class="p">[:</span><span class="mi">6</span><span class="p">]):</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>            <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">close_gripper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;闭合夹爪&quot;&quot;&quot;</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">width</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">width</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>            <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">open_gripper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;张开夹爪&quot;&quot;&quot;</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.04</span>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.04</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>            <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_contact_force</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;读取夹爪接触力&quot;&quot;&quot;</span>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>        <span class="n">total_force</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ncon</span><span class="p">):</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>            <span class="n">force</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a>            <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_contactForce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">force</span><span class="p">)</span>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a>            <span class="n">total_force</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">force</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a>        <span class="k">return</span> <span class="n">total_force</span>
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a>
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">robot_move_fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instrument_id</span><span class="p">):</span>
+<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-5-55" name="__codelineno-5-55" href="#__codelineno-5-55"></a><span class="sd">        复现 v2 固定位置模式的三阶段运动序列</span>
+<a id="__codelineno-5-56" name="__codelineno-5-56" href="#__codelineno-5-56"></a><span class="sd">        Phase 1: 悬停 → 下降 → 夹取</span>
+<a id="__codelineno-5-57" name="__codelineno-5-57" href="#__codelineno-5-57"></a><span class="sd">        Phase 2: 抬升 → 复位 → 交付 → 松开</span>
+<a id="__codelineno-5-58" name="__codelineno-5-58" href="#__codelineno-5-58"></a><span class="sd">        Phase 3: 归位</span>
+<a id="__codelineno-5-59" name="__codelineno-5-59" href="#__codelineno-5-59"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a>        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_positions</span><span class="p">[</span><span class="n">instrument_id</span><span class="p">]</span>
+<a id="__codelineno-5-61" name="__codelineno-5-61" href="#__codelineno-5-61"></a>
+<a id="__codelineno-5-62" name="__codelineno-5-62" href="#__codelineno-5-62"></a>        <span class="c1"># Phase 1: Grasp</span>
+<a id="__codelineno-5-63" name="__codelineno-5-63" href="#__codelineno-5-63"></a>        <span class="n">hover</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ik_solve</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">150</span><span class="p">)</span>
+<a id="__codelineno-5-64" name="__codelineno-5-64" href="#__codelineno-5-64"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">move_to_joint_target</span><span class="p">(</span><span class="n">hover</span><span class="p">)</span>
+<a id="__codelineno-5-65" name="__codelineno-5-65" href="#__codelineno-5-65"></a>        <span class="n">grasp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ik_solve</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-5-66" name="__codelineno-5-66" href="#__codelineno-5-66"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">move_to_joint_target</span><span class="p">(</span><span class="n">grasp</span><span class="p">)</span>
+<a id="__codelineno-5-67" name="__codelineno-5-67" href="#__codelineno-5-67"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">close_gripper</span><span class="p">()</span>
+<a id="__codelineno-5-68" name="__codelineno-5-68" href="#__codelineno-5-68"></a>
+<a id="__codelineno-5-69" name="__codelineno-5-69" href="#__codelineno-5-69"></a>        <span class="c1"># Phase 2: Deliver</span>
+<a id="__codelineno-5-70" name="__codelineno-5-70" href="#__codelineno-5-70"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">move_to_joint_target</span><span class="p">(</span><span class="n">hover</span><span class="p">)</span>
+<a id="__codelineno-5-71" name="__codelineno-5-71" href="#__codelineno-5-71"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">move_to_joint_target</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RESET_JOINTS</span><span class="p">)</span>
+<a id="__codelineno-5-72" name="__codelineno-5-72" href="#__codelineno-5-72"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">move_to_joint_target</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TARGET_JOINTS</span><span class="p">)</span>
+<a id="__codelineno-5-73" name="__codelineno-5-73" href="#__codelineno-5-73"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">open_gripper</span><span class="p">()</span>
+<a id="__codelineno-5-74" name="__codelineno-5-74" href="#__codelineno-5-74"></a>
+<a id="__codelineno-5-75" name="__codelineno-5-75" href="#__codelineno-5-75"></a>        <span class="c1"># Phase 3: Return</span>
+<a id="__codelineno-5-76" name="__codelineno-5-76" href="#__codelineno-5-76"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">move_to_joint_target</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RESET_JOINTS</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="25-colab">2.5 Colab 集成方案<a class="headerlink" href="#25-colab" title="Permanent link">&para;</a></h3>
+<p>MuJoCo 在 Colab 中使用离屏渲染 + mediapy 展示视频：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Colab 安装</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">mujoco</span> <span class="n">mediapy</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mujoco</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mediapy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">media</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># 离屏渲染器</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">renderer</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">Renderer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">640</span><span class="p">)</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">render_trajectory</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">instrument_id</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;录制抓取全流程视频并在 Colab 中播放&quot;&quot;&quot;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="c1"># hook 到 mj_step 中采集帧</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    <span class="n">original_step</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_step</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step_and_capture</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>        <span class="n">original_step</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>        <span class="n">renderer</span><span class="o">.</span><span class="n">update_scene</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>        <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>    <span class="c1"># 执行运动并采集</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>    <span class="n">sim</span><span class="o">.</span><span class="n">robot_move_fixed</span><span class="p">(</span><span class="n">instrument_id</span><span class="p">)</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>    <span class="n">media</span><span class="o">.</span><span class="n">show_video</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="3">3. 实施路线<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="phase-a">Phase A: 模型准备<a class="headerlink" href="#phase-a" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>内容</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>从 Dobot ROS 仓库获取 CR5 URDF + mesh</td>
+<td>URDF 文件 + STL mesh</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>URDF → MJCF 转换 + 参数校验</td>
+<td><code>cr5_robot.xml</code></td>
+</tr>
+<tr>
+<td>A3</td>
+<td>添加 DH-3 夹爪模型</td>
+<td>集成到 CR5 模型末端</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>创建器械简化模型</td>
+<td><code>instruments.xml</code></td>
+</tr>
+<tr>
+<td>A5</td>
+<td>组装完整场景</td>
+<td><code>surgbot_scene.xml</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-b">Phase B: 控制逻辑<a class="headerlink" href="#phase-b" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>内容</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1</td>
+<td>实现关节位置伺服控制</td>
+<td><code>SurgBotMuJoCoSim</code> 基类</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>集成逆运动学求解（数值雅可比 IK）</td>
+<td><code>ik_solve()</code> 方法</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>复现三阶段运动序列</td>
+<td><code>robot_move_fixed()</code></td>
+</tr>
+<tr>
+<td>B4</td>
+<td>夹爪抓取 + 接触力检测</td>
+<td>力反馈验证</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-c">Phase C: 可视化与集成<a class="headerlink" href="#phase-c" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>内容</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Colab notebook 集成（离屏渲染 + 视频）</td>
+<td><code>mujoco_simulation.ipynb</code></td>
+</tr>
+<tr>
+<td>C2</td>
+<td>四种器械轮换演示视频</td>
+<td>Colab 内可播放</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>接触力可视化图表</td>
+<td>力-时间曲线</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>与 Level 0 Mock 仿真结果对比</td>
+<td>验证一致性</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4">4. 关键挑战与应对<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>挑战</th>
+<th>风险等级</th>
+<th>应对策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CR5 URDF 质量不确定</td>
+<td>中</td>
+<td>先用 MuJoCo viewer 目视检查，必要时手动修正 DH 参数</td>
+</tr>
+<tr>
+<td>mesh 文件缺失或格式问题</td>
+<td>中</td>
+<td>降级为基本几何体（cylinder/box）替代</td>
+</tr>
+<tr>
+<td>逆运动学求解</td>
+<td>高</td>
+<td>使用 MuJoCo 内置 <code>mj_inverse</code> 或数值雅可比法</td>
+</tr>
+<tr>
+<td>Colab 渲染性能</td>
+<td>低</td>
+<td>使用离屏渲染 + mediapy，无需 GPU</td>
+</tr>
+<tr>
+<td>夹爪-器械接触稳定性</td>
+<td>中</td>
+<td>调整接触参数（<code>solref</code>/<code>solimp</code>），使用 <code>condim=4</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-isaac-sim">5. 与 Isaac Sim 的协同<a class="headerlink" href="#5-isaac-sim" title="Permanent link">&para;</a></h2>
+<p>MuJoCo 和 Isaac Sim 不互斥，而是互补：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>开发调试（快速迭代）  →  MuJoCo（Colab / 本地 CPU）
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  ↓ 验证通过
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>高保真仿真 + 视觉    →  Isaac Sim（GPU 服务器）
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  ↓ 模型训练
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>Sim2Real 迁移        →  真实 CR5 机械臂
+</code></pre></div>
+<ul>
+<li><strong>共享模型</strong>：URDF 作为统一中间格式，两个引擎各自转换</li>
+<li><strong>共享控制接口</strong>：抽象出 <code>RobotController</code> 接口，适配 MuJoCo / Isaac / 真实机器</li>
+<li><strong>分工明确</strong>：MuJoCo 负责控制逻辑验证和力学仿真，Isaac Sim 负责视觉仿真和数据生成</li>
+</ul>
+<h2 id="6">6. 预期产出<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[x] MuJoCo 方案建议文档（本文）</li>
+<li>[x] <code>cr5_robot.xml</code> — CR5 MJCF 模型（从官方 URDF 转换，含 STL mesh）</li>
+<li>[x] <code>instruments.xml</code> — 器械模型（4 种器械 + 托盘）</li>
+<li>[x] <code>surgbot_scene.xml</code> — 完整场景（CR5 + 夹爪 + 器械 + 桌面）</li>
+<li>[x] <code>mujoco_demo.ipynb</code> — Colab notebook（多角度渲染 + 运动动画）</li>
+<li>[ ] 四种器械 pick-and-place 演示视频（Phase B）</li>
+<li>[ ] 接触力仿真报告（Phase B）</li>
+</ul>
+<h2 id="_4">相关链接<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://mujoco.readthedocs.io/">MuJoCo 官方文档</a></li>
+<li><a href="https://github.com/google-deepmind/mujoco_playground">MuJoCo Playground</a></li>
+<li><a href="https://github.com/Dobot-Arm/TCP-IP-ROS-6AXis">Dobot ROS SDK (含URDF)</a></li>
+<li><a href="../../../progress/v2_fixed_position/">Level 0: Colab Mock 仿真</a></li>
+<li><a href="../../../progress/v2_fixed_position/">v2 固定位置模式方案</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      SurgBot Team &mdash; 文档版本 v0.3.0 &mdash; 最近更新 2026-03-18
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
