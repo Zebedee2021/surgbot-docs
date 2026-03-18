@@ -134,49 +134,65 @@
 
                   <!-- ======== DH-3 Gripper (mounted on Link6) ======== -->
                   <!-- Connector flange between Link6 and gripper -->
-                  <geom name="gripper_flange" type="cylinder" size="0.028 0.012"
-                        pos="0 0 -0.012" rgba="0.3 0.3 0.3 1"/>
+                  <geom name="gripper_flange" type="cylinder" size="0.032 0.015"
+                        pos="0 0 -0.015" rgba="0.25 0.25 0.25 1"/>
 
-                  <body name="gripper_base" pos="0 0 -0.04">
-                    <!-- Housing (100x80x50mm, blue) -->
-                    <geom name="gripper_housing" type="box" size="0.05 0.04 0.025"
+                  <body name="gripper_base" pos="0 0 -0.045">
+                    <!-- Housing (120x90x40mm, bright blue) -->
+                    <geom name="gripper_housing" type="box" size="0.06 0.045 0.02"
                           mass="0.3" material="gripper_blue"/>
+                    <!-- Housing label stripe (visual) -->
+                    <geom name="gripper_stripe" type="box" size="0.055 0.002 0.021"
+                          pos="0 0 0" rgba="0.9 0.9 0.9 1"
+                          contype="0" conaffinity="0"/>
 
-                    <!-- Left finger -->
-                    <body name="gripper_left_finger" pos="0 0.015 -0.025">
+                    <!-- Left finger assembly -->
+                    <body name="gripper_left_finger" pos="0 0.02 -0.02">
                       <joint name="gripper_left" type="slide" axis="0 1 0"
-                             range="0 0.025" damping="2"/>
+                             range="0 0.03" damping="2"/>
+                      <!-- Finger bracket (metal) -->
+                      <geom name="gripper_left_bracket" type="box"
+                            size="0.015 0.012 0.015" pos="0 0 -0.01"
+                            mass="0.02" rgba="0.6 0.6 0.6 1"/>
+                      <!-- Finger body (elongated, bright red) -->
                       <geom name="gripper_left_body" type="box"
-                            size="0.008 0.01 0.035" pos="0 0 -0.035"
-                            mass="0.05" rgba="0.5 0.5 0.5 1"/>
-                      <body name="gripper_left_pad" pos="0 -0.01 -0.06">
+                            size="0.015 0.012 0.04" pos="0 0 -0.055"
+                            mass="0.05" rgba="0.85 0.15 0.1 1"/>
+                      <!-- Finger pad (rubber, dark) -->
+                      <body name="gripper_left_pad" pos="0 -0.012 -0.085">
                         <geom name="left_pad" type="box"
-                              size="0.008 0.004 0.012" mass="0.01"
+                              size="0.014 0.005 0.015" mass="0.01"
                               material="rubber_black"
                               friction="2 0.5 0.005" condim="4"/>
-                        <site name="left_pad_site" pos="0 0 0" size="0.004"/>
+                        <site name="left_pad_site" pos="0 0 0" size="0.005"/>
                       </body>
                     </body>
 
-                    <!-- Right finger (mirrored) -->
-                    <body name="gripper_right_finger" pos="0 -0.015 -0.025">
+                    <!-- Right finger assembly (mirrored) -->
+                    <body name="gripper_right_finger" pos="0 -0.02 -0.02">
                       <joint name="gripper_right" type="slide" axis="0 -1 0"
-                             range="0 0.025" damping="2"/>
+                             range="0 0.03" damping="2"/>
+                      <!-- Finger bracket (metal) -->
+                      <geom name="gripper_right_bracket" type="box"
+                            size="0.015 0.012 0.015" pos="0 0 -0.01"
+                            mass="0.02" rgba="0.6 0.6 0.6 1"/>
+                      <!-- Finger body (elongated, bright red) -->
                       <geom name="gripper_right_body" type="box"
-                            size="0.008 0.01 0.035" pos="0 0 -0.035"
-                            mass="0.05" rgba="0.5 0.5 0.5 1"/>
-                      <body name="gripper_right_pad" pos="0 0.01 -0.06">
+                            size="0.015 0.012 0.04" pos="0 0 -0.055"
+                            mass="0.05" rgba="0.85 0.15 0.1 1"/>
+                      <!-- Finger pad (rubber, dark) -->
+                      <body name="gripper_right_pad" pos="0 0.012 -0.085">
                         <geom name="right_pad" type="box"
-                              size="0.008 0.004 0.012" mass="0.01"
+                              size="0.014 0.005 0.015" mass="0.01"
                               material="rubber_black"
                               friction="2 0.5 0.005" condim="4"/>
-                        <site name="right_pad_site" pos="0 0 0" size="0.004"/>
+                        <site name="right_pad_site" pos="0 0 0" size="0.005"/>
                       </body>
                     </body>
 
-                    <!-- TCP site (tool center point) -->
-                    <site name="gripper_tcp" pos="0 0 -0.09"
-                          size="0.006" rgba="1 1 0 0.5"/>
+                    <!-- TCP site (tool center point, between pads) -->
+                    <site name="gripper_tcp" pos="0 0 -0.1"
+                          size="0.008" rgba="1 1 0 0.6"/>
                   </body>
                   <!-- ======== End Gripper ======== -->
 
@@ -324,9 +340,9 @@
     <position name="joint6_ctrl" joint="joint6" kp="50"
               ctrlrange="-6.28 6.28"/>
     <position name="gripper_left_ctrl" joint="gripper_left" kp="50"
-              ctrlrange="0 0.025"/>
+              ctrlrange="0 0.03"/>
     <position name="gripper_right_ctrl" joint="gripper_right" kp="50"
-              ctrlrange="0 0.025"/>
+              ctrlrange="0 0.03"/>
   </actuator>
 
   <!-- ============================================ -->
