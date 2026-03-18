@@ -21,7 +21,7 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
-    - navigation.expand
+    - navigation.indexes
     - navigation.top
     - search.highlight
     - search.suggest
@@ -33,6 +33,9 @@ extra:
   version:
     provider: mike
   generator: false
+
+extra_css:
+  - stylesheets/nav.css
 
 copyright: "SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18"
 
@@ -73,27 +76,27 @@ nav:
     - 系统安全约束: overview/safety_constraints.md
   - 模块文档:
     - 感知模块:
-      - 概述: modules/perception/index.md
+      - modules/perception/index.md
       - YOLO 器械检测: modules/perception/yolo_detection.md
       - 相机标定: modules/perception/camera_calibration.md
       - 夹取点算法: modules/perception/grasp_algorithm.md
     - NLP 模块:
-      - 概述: modules/nlp/index.md
+      - modules/nlp/index.md
       - Qwen2.5 SFT 微调: modules/nlp/qwen_sft.md
       - DPO 对齐优化: modules/nlp/dpo_alignment.md
       - 器械标准化词库: modules/nlp/instrument_vocab.md
     - 决策模块:
-      - 概述: modules/decision/index.md
+      - modules/decision/index.md
       - OpenVLA 进展: modules/decision/openvla_progress.md
       - LIBERO 仿真评测: modules/decision/libero_eval.md
       - 数据流水线: modules/decision/data_pipeline.md
     - 执行模块:
-      - 概述: modules/execution/index.md
+      - modules/execution/index.md
       - CR5 控制接口: modules/execution/dobot_cr5_control.md
       - 运动规划: modules/execution/motion_planning.md
       - 安全策略: modules/execution/safety_strategy.md
     - 仿真模块:
-      - 概述: modules/simulation/index.md
+      - modules/simulation/index.md
       - Isaac Sim 环境搭建: modules/simulation/isaac_sim_setup.md
       - 虚拟手术室方案: modules/simulation/surgery_room_sim.md
   - 项目进展:
