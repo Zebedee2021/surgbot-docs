@@ -2,7 +2,7 @@
 
 | 文档版本 | 最近更新 | 项目阶段 |
 |---------|---------|---------|
-| v0.2.0 | 2026-03-18 | 现场测试问题改进中 |
+| v0.3.0 | 2026-03-18 | v2 固定位置模式方案设计完成 |
 
 欢迎访问**手术器械护士机器助手**项目文档。
 
@@ -40,5 +40,6 @@ graph LR
 - [项目简介](overview/introduction.md) - 项目背景与目标
 - [系统架构](overview/architecture.md) - 技术架构设计
 - [人机协同方案](overview/human_robot_collab.md) - 机器人与护士如何配合
-- [2026年2月现场测试](progress/field_test_202602.md) - 最新测试问题总结
+- [v2 固定位置模式方案](progress/v2_fixed_position.md) - 五一演示版技术方案
+- [2026年2月现场测试](progress/field_test_202602.md) - 现场测试问题总结
 - [操作指南](guides/git_quickstart.md) - Git 入门与协作规范

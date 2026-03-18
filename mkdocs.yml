@@ -37,8 +37,7 @@ extra:
 extra_css:
   - stylesheets/nav.css
 
-
-copyright: "SurgBot Team &mdash; 文档版本 v0.2.0 &mdash; 最近更新 2026-03-18"
+copyright: "SurgBot Team &mdash; 文档版本 v0.3.0 &mdash; 最近更新 2026-03-18"
 
 plugins:
   - search:
@@ -104,6 +103,7 @@ nav:
     - Sim2Real 仪表盘: progress/sim2real_dashboard.md
     - 全局问题追踪: progress/issue_tracker.md
     - 2026年2月现场测试: progress/field_test_202602.md
+    - v2 固定位置模式: progress/v2_fixed_position.md
     - OpenVLA 阶段进展: progress/openvla_status.md
     - 里程碑: progress/milestones.md
   - 会议记录:
