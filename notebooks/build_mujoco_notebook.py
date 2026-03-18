@@ -237,30 +237,57 @@ media.show_video(frames, fps=fps, title="Reset -> Target Motion")"""))
 cells.append(code("""# Cell 8: Gripper open/close cycle animation
 frames_g = []
 
-# Move to reset pose first
+# Move to reset pose first and stabilize
+mujoco.mj_resetData(model, data)
+key_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, 'reset')
+data.qpos[:] = model.key_qpos[key_id]
+data.ctrl[:] = model.key_ctrl[key_id]
 for i in range(6):
     data.ctrl[i] = RESET_RAD[i]
-for _ in range(500):
+# Start with gripper open
+data.ctrl[6] = 0.03
+data.ctrl[7] = 0.03
+for _ in range(1000):
     mujoco.mj_step(model, data)
 
-# Open -> Close -> Open cycle
-gripper_targets = (
-    [(0.025, "Opening")] * 40 +
-    [(0.0, "Closing")] * 40 +
-    [(0.025, "Opening")] * 40
-)
+# Camera looks at TCP/gripper area
+tcp_id = model.site("gripper_tcp").id
+tcp_pos = data.site_xpos[tcp_id].copy()
 
-for step, (g_target, label) in enumerate(gripper_targets):
-    data.ctrl[6] = g_target
-    data.ctrl[7] = g_target
-    for _ in range(5):
+# Record one static frame first (open state)
+for _ in range(5):
+    frames_g.append(render_frame(data, distance=0.45, elevation=-15,
+                                 azimuth=135, lookat=list(tcp_pos)))
+
+# Phase 1: Close gripper (60 frames, plenty of sim time)
+for step in range(60):
+    data.ctrl[6] = 0.0
+    data.ctrl[7] = 0.0
+    for _ in range(30):  # 30 steps per frame = 0.06s per frame
         mujoco.mj_step(model, data)
     if step % 2 == 0:
-        frames_g.append(render_frame(data, distance=0.4, elevation=-10,
-                                     azimuth=135, lookat=list(data.site_xpos[model.site("gripper_tcp").id])))
+        frames_g.append(render_frame(data, distance=0.45, elevation=-15,
+                                     azimuth=135, lookat=list(tcp_pos)))
+
+# Hold closed
+for _ in range(5):
+    for __ in range(30):
+        mujoco.mj_step(model, data)
+    frames_g.append(render_frame(data, distance=0.45, elevation=-15,
+                                 azimuth=135, lookat=list(tcp_pos)))
+
+# Phase 2: Open gripper again
+for step in range(60):
+    data.ctrl[6] = 0.03
+    data.ctrl[7] = 0.03
+    for _ in range(30):
+        mujoco.mj_step(model, data)
+    if step % 2 == 0:
+        frames_g.append(render_frame(data, distance=0.45, elevation=-15,
+                                     azimuth=135, lookat=list(tcp_pos)))
 
 print(f"Captured {len(frames_g)} frames")
-media.show_video(frames_g, fps=20, title="Gripper Open/Close Cycle")"""))
+media.show_video(frames_g, fps=15, title="Gripper Open/Close Cycle")"""))
 
 # ── Cell 9: Model summary ──
 cells.append(code("""# Cell 9: Complete model summary
