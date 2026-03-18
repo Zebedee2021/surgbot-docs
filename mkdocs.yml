@@ -118,6 +118,7 @@ nav:
     - 李淑雅: members/li_shuya.md
     - 任松: members/ren_song.md
     - 谭文韬: members/tan_wentao.md
+  - 在线演示: demos/index.md
   - 参考资料:
     - 论文列表: references/paper_list.md
     - 相关项目: references/related_projects.md
