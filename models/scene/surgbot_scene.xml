@@ -1,0 +1,307 @@
+<!-- surgbot_scene.xml - Complete MuJoCo simulation scene
+     Dobot CR5 + DH-3 gripper + surgical instruments on tray
+     Units: meters, radians, kg
+     Coordinate system: Z-up, X-forward (toward instruments) -->
+<mujoco model="surgbot_v2">
+  <compiler angle="radian" meshdir="../cr5/meshes"/>
+
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="implicit"/>
+
+  <default>
+    <joint damping="5"/>
+    <geom condim="4" friction="1 0.5 0.005"/>
+    <default class="visual">
+      <geom contype="0" conaffinity="0" group="1"/>
+    </default>
+  </default>
+
+  <asset>
+    <!-- CR5 meshes -->
+    <mesh name="base_link" file="base_link.stl"/>
+    <mesh name="Link1" file="Link1.stl"/>
+    <mesh name="Link2" file="Link2.stl"/>
+    <mesh name="Link3" file="Link3.stl"/>
+    <mesh name="Link4" file="Link4.stl"/>
+    <mesh name="Link5" file="Link5.stl"/>
+    <mesh name="Link6" file="Link6.stl"/>
+    <!-- Materials -->
+    <material name="steel" rgba="0.75 0.75 0.78 1"/>
+    <material name="dark_metal" rgba="0.2 0.2 0.2 1"/>
+    <material name="table_green" rgba="0.3 0.5 0.3 1"/>
+    <material name="tray_blue" rgba="0.6 0.75 0.85 1"/>
+    <material name="marker_green" rgba="0 0.8 0 0.4"/>
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512"
+             rgb1="0.9 0.9 0.9" rgb2="0.8 0.8 0.8"/>
+    <material name="floor_mat" texture="grid" texrepeat="10 10"/>
+  </asset>
+
+  <worldbody>
+    <!-- Lighting -->
+    <light name="top_light" pos="0 0 2.5" dir="0 0 -1" diffuse="0.8 0.8 0.8"
+           specular="0.3 0.3 0.3" directional="true"/>
+    <light name="front_light" pos="1 -1 2" dir="-0.5 0.5 -1" diffuse="0.4 0.4 0.4"/>
+
+    <!-- Ground plane -->
+    <geom name="floor" type="plane" size="3 3 0.01" material="floor_mat"
+          conaffinity="1" condim="3"/>
+
+    <!-- Operating table (750mm high) -->
+    <body name="table" pos="0.2 0 0.37">
+      <!-- Table top -->
+      <geom name="table_top" type="box" size="0.5 0.4 0.02"
+            material="table_green" mass="20"/>
+      <!-- Table legs -->
+      <geom name="table_leg1" type="cylinder" size="0.03 0.35"
+            pos="-0.45 -0.35 -0.37" rgba="0.5 0.5 0.5 1"/>
+      <geom name="table_leg2" type="cylinder" size="0.03 0.35"
+            pos="0.45 -0.35 -0.37" rgba="0.5 0.5 0.5 1"/>
+      <geom name="table_leg3" type="cylinder" size="0.03 0.35"
+            pos="-0.45 0.35 -0.37" rgba="0.5 0.5 0.5 1"/>
+      <geom name="table_leg4" type="cylinder" size="0.03 0.35"
+            pos="0.45 0.35 -0.37" rgba="0.5 0.5 0.5 1"/>
+    </body>
+
+    <!-- ============================================ -->
+    <!-- CR5 Robot Arm (mounted on table, base at table surface) -->
+    <!-- ============================================ -->
+    <body name="cr5_base" pos="0 0 0.76">
+      <geom type="mesh" rgba="0 0 0 1" mesh="base_link"/>
+
+      <body name="Link1" pos="0 0 0.147">
+        <inertial pos="-8.7268e-07 -0.0032576 -0.0076748"
+                  quat="0.615786 0.347596 -0.347595 0.615761"
+                  mass="1.6123"
+                  diaginertia="0.00354972 0.0029122 0.00255298"/>
+        <joint name="joint1" pos="0 0 0" axis="0 0 1"
+               range="-3.14 3.14" damping="10"/>
+        <geom type="mesh" rgba="1 1 1 1" mesh="Link1"/>
+
+        <body name="Link2" quat="0.499998 0.5 0.5 -0.500002">
+          <inertial pos="-0.21351 -1.3842e-06 0.14252"
+                    quat="8.38738e-05 0.707093 5.56955e-05 0.707121"
+                    mass="5.5186"
+                    diaginertia="0.028294 0.027553 0.0085919"/>
+          <joint name="joint2" pos="0 0 0" axis="0 0 1"
+                 range="-3.14 3.14" damping="10"/>
+          <geom type="mesh" rgba="1 1 1 1" mesh="Link2"/>
+
+          <body name="Link3" pos="-0.427 0 0">
+            <inertial pos="-0.15231 -1.4079e-07 0.022693"
+                      quat="0 0.714013 0 0.700132"
+                      mass="2.8536"
+                      diaginertia="0.00955763 0.0092967 0.00325837"/>
+            <joint name="joint3" pos="0 0 0" axis="0 0 1"
+                   range="-2.86 2.86" damping="8"/>
+            <geom type="mesh" rgba="1 1 1 1" mesh="Link3"/>
+
+            <body name="Link4" pos="-0.357 0 0.141"
+                  quat="0.707105 0 0 -0.707108">
+              <inertial pos="-3.2386e-07 -0.002077 -0.0015548"
+                        quat="0.653428 0.270173 -0.270153 0.653495"
+                        mass="0.67058"
+                        diaginertia="0.000764755 0.00066939 0.000543135"/>
+              <joint name="joint4" pos="0 0 0" axis="0 0 1"
+                     range="-3.14 3.14" damping="5"/>
+              <geom type="mesh" rgba="1 1 1 1" mesh="Link4"/>
+
+              <body name="Link5" pos="0 -0.116 0"
+                    quat="0.707105 0.707108 0 0">
+                <inertial pos="-3.7738e-07 -0.0045777 -0.0012971"
+                          quat="0.27195 0.652753 -0.652695 0.271929"
+                          mass="0.7269"
+                          diaginertia="0.000832194 0.00073069 0.000593666"/>
+                <joint name="joint5" pos="0 0 0" axis="0 0 1"
+                       range="-3.14 3.14" damping="5"/>
+                <geom type="mesh" rgba="1 1 1 1" mesh="Link5"/>
+
+                <body name="Link6" pos="0 0.105 0"
+                      quat="0.707105 -0.707108 0 0">
+                  <inertial pos="5.0777e-11 9.3774e-05 -0.019285"
+                            quat="-0.000970713 0.707106 -0.000970713 0.707106"
+                            mass="0.15789"
+                            diaginertia="0.00012951 7.91676e-05 7.8045e-05"/>
+                  <joint name="joint6" pos="0 0 0" axis="0 0 1"
+                         range="-6.28 6.28" damping="3"/>
+                  <geom type="mesh" rgba="1 1 1 1" mesh="Link6"/>
+                  <site name="ee_site" pos="0 0 0" size="0.01" rgba="1 0 0 0.5"/>
+
+                  <!-- ======== DH-3 Gripper (mounted on Link6) ======== -->
+                  <body name="gripper_base" pos="0 0 -0.04">
+                    <geom name="gripper_housing" type="box" size="0.04 0.03 0.015"
+                          mass="0.3" material="dark_metal"/>
+
+                    <!-- Left finger -->
+                    <body name="gripper_left_finger" pos="0 0.01 -0.015">
+                      <joint name="gripper_left" type="slide" axis="0 1 0"
+                             range="0 0.025" damping="2"/>
+                      <geom name="gripper_left_body" type="box"
+                            size="0.005 0.0075 0.03" pos="0 0 -0.03"
+                            mass="0.05" rgba="0.4 0.4 0.4 1"/>
+                      <body name="gripper_left_pad" pos="0 -0.0075 -0.05">
+                        <geom name="left_pad" type="box"
+                              size="0.005 0.002 0.01" mass="0.01"
+                              rgba="0.15 0.15 0.15 1"
+                              friction="2 0.5 0.005" condim="4"/>
+                        <site name="left_pad_site" pos="0 0 0" size="0.003"/>
+                      </body>
+                    </body>
+
+                    <!-- Right finger (mirrored) -->
+                    <body name="gripper_right_finger" pos="0 -0.01 -0.015">
+                      <joint name="gripper_right" type="slide" axis="0 -1 0"
+                             range="0 0.025" damping="2"/>
+                      <geom name="gripper_right_body" type="box"
+                            size="0.005 0.0075 0.03" pos="0 0 -0.03"
+                            mass="0.05" rgba="0.4 0.4 0.4 1"/>
+                      <body name="gripper_right_pad" pos="0 0.0075 -0.05">
+                        <geom name="right_pad" type="box"
+                              size="0.005 0.002 0.01" mass="0.01"
+                              rgba="0.15 0.15 0.15 1"
+                              friction="2 0.5 0.005" condim="4"/>
+                        <site name="right_pad_site" pos="0 0 0" size="0.003"/>
+                      </body>
+                    </body>
+
+                    <!-- TCP site -->
+                    <site name="gripper_tcp" pos="0 0 -0.065"
+                          size="0.005" rgba="1 1 0 0.5"/>
+                  </body>
+                  <!-- ======== End Gripper ======== -->
+
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+    <!-- ============================================ -->
+    <!-- End CR5 Robot Arm -->
+    <!-- ============================================ -->
+
+    <!-- ============================================ -->
+    <!-- Instrument Tray (static) -->
+    <!-- ============================================ -->
+    <body name="instrument_tray" pos="0.295 -0.113 0.76">
+      <geom name="tray_surface" type="box" size="0.1 0.075 0.0025"
+            mass="0.2" material="tray_blue" friction="0.8 0.3 0.001"/>
+    </body>
+
+    <!-- ============================================ -->
+    <!-- 4 Instruments (free joints, must be worldbody children) -->
+    <!-- Absolute positions = tray(0.295,-0.113,0.76) + offset -->
+    <!-- ============================================ -->
+
+    <!-- Instrument 0: Scalpel handle (刀柄) -->
+    <body name="scalpel_handle" pos="0.25 -0.12 0.765">
+      <joint name="scalpel_free" type="free"/>
+      <geom name="scalpel_body" type="cylinder" size="0.005 0.06"
+            mass="0.05" material="steel"
+            euler="0 1.5708 0.7854"/>
+    </body>
+
+    <!-- Instrument 1: Tweezers (镊子) -->
+    <body name="tweezers" pos="0.28 -0.096 0.765">
+      <joint name="tweezers_free" type="free"/>
+      <geom name="tweezers_body" type="capsule" size="0.002 0.07"
+            mass="0.03" material="steel"
+            euler="0 1.5708 0.5236"/>
+    </body>
+
+    <!-- Instrument 2: Scissors (剪刀) -->
+    <body name="scissors" pos="0.31 -0.131 0.765">
+      <joint name="scissors_free" type="free"/>
+      <geom name="scissors_body" type="capsule" size="0.003 0.06"
+            mass="0.06" material="steel"
+            euler="0 1.5708 1.0472"/>
+    </body>
+
+    <!-- Instrument 3: Needle holder (持针钳) -->
+    <body name="needle_holder" pos="0.34 -0.11 0.765">
+      <joint name="needle_holder_free" type="free"/>
+      <geom name="needle_holder_body" type="capsule" size="0.004 0.065"
+            mass="0.07" material="steel"
+            euler="0 1.5708 0.2618"/>
+    </body>
+    <!-- ============================================ -->
+    <!-- End Instruments -->
+    <!-- ============================================ -->
+
+    <!-- Delivery point marker (visual only, no collision) -->
+    <body name="delivery_marker" pos="-0.2 0.3 0.85">
+      <geom name="delivery_zone" type="cylinder" size="0.05 0.003"
+            material="marker_green" contype="0" conaffinity="0"/>
+      <site name="delivery_site" pos="0 0 0.005" size="0.01"
+            rgba="0 0.8 0 0.5"/>
+    </body>
+  </worldbody>
+
+  <!-- ============================================ -->
+  <!-- Actuators: 6 arm joints + 2 gripper fingers -->
+  <!-- ============================================ -->
+  <actuator>
+    <position name="joint1_ctrl" joint="joint1" kp="200"
+              ctrlrange="-3.14 3.14"/>
+    <position name="joint2_ctrl" joint="joint2" kp="200"
+              ctrlrange="-3.14 3.14"/>
+    <position name="joint3_ctrl" joint="joint3" kp="150"
+              ctrlrange="-2.86 2.86"/>
+    <position name="joint4_ctrl" joint="joint4" kp="80"
+              ctrlrange="-3.14 3.14"/>
+    <position name="joint5_ctrl" joint="joint5" kp="80"
+              ctrlrange="-3.14 3.14"/>
+    <position name="joint6_ctrl" joint="joint6" kp="50"
+              ctrlrange="-6.28 6.28"/>
+    <position name="gripper_left_ctrl" joint="gripper_left" kp="50"
+              ctrlrange="0 0.025"/>
+    <position name="gripper_right_ctrl" joint="gripper_right" kp="50"
+              ctrlrange="0 0.025"/>
+  </actuator>
+
+  <!-- ============================================ -->
+  <!-- Sensors -->
+  <!-- ============================================ -->
+  <sensor>
+    <force name="ee_force" site="ee_site"/>
+    <torque name="ee_torque" site="ee_site"/>
+    <touch name="left_pad_touch" site="left_pad_site"/>
+    <touch name="right_pad_touch" site="right_pad_site"/>
+  </sensor>
+
+  <!-- ============================================ -->
+  <!-- Equality constraints: gripper finger coupling -->
+  <!-- ============================================ -->
+  <equality>
+    <joint joint1="gripper_left" joint2="gripper_right" polycoef="0 1 0 0 0"/>
+  </equality>
+
+  <!-- ============================================ -->
+  <!-- Keyframes: pre-defined poses -->
+  <!-- ============================================ -->
+  <keyframe>
+    <!-- Home / zero position (all joints at 0) -->
+    <key name="home"
+         qpos="0 0 0 0 0 0 0 0
+               0.25 -0.12 0.765 1 0 0 0
+               0.28 -0.096 0.765 1 0 0 0
+               0.31 -0.131 0.765 1 0 0 0
+               0.34 -0.11 0.765 1 0 0 0"
+         ctrl="0 0 0 0 0 0 0.02 0.02"/>
+    <!-- Reset position: [0, 32.6, -129.1, 6.7, 90, -90] degrees -->
+    <key name="reset"
+         qpos="0 0.5691 -2.2532 0.1169 1.5708 -1.5708 0 0
+               0.25 -0.12 0.765 1 0 0 0
+               0.28 -0.096 0.765 1 0 0 0
+               0.31 -0.131 0.765 1 0 0 0
+               0.34 -0.11 0.765 1 0 0 0"
+         ctrl="0 0.5691 -2.2532 0.1169 1.5708 -1.5708 0.02 0.02"/>
+    <!-- Target/delivery position: [0, -50.2, -67.3, 112.5, 90, -90] degrees -->
+    <key name="target"
+         qpos="0 -0.8762 -1.1745 1.9635 1.5708 -1.5708 0 0
+               0.25 -0.12 0.765 1 0 0 0
+               0.28 -0.096 0.765 1 0 0 0
+               0.31 -0.131 0.765 1 0 0 0
+               0.34 -0.11 0.765 1 0 0 0"
+         ctrl="0 -0.8762 -1.1745 1.9635 1.5708 -1.5708 0.02 0.02"/>
+  </keyframe>
+</mujoco>

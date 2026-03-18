@@ -1,0 +1,46 @@
+<!-- dh3_gripper.xml - DH Robotics DH-3 parallel gripper for CR5 end-effector
+     Two-finger parallel gripper with slide joints.
+     Mount on Link6 ee_site via scene file.
+     Units: meters, radians, kg -->
+<mujoco model="dh3_gripper">
+  <body name="gripper_base" pos="0 0 -0.04">
+    <!-- Gripper base housing (80x60x30 mm) -->
+    <geom name="gripper_housing" type="box" size="0.04 0.03 0.015"
+          mass="0.3" rgba="0.2 0.2 0.2 1"/>
+
+    <!-- Left finger assembly -->
+    <body name="gripper_left_finger" pos="0 0.01 -0.015">
+      <joint name="gripper_left_joint" type="slide" axis="0 1 0"
+             range="0 0.025" damping="2" stiffness="0"/>
+      <!-- Finger body (10x15x60 mm) -->
+      <geom name="gripper_left_body" type="box" size="0.005 0.0075 0.03"
+            pos="0 0 -0.03" mass="0.05" rgba="0.4 0.4 0.4 1"/>
+      <!-- Contact pad (high friction) -->
+      <body name="gripper_left_pad" pos="0 -0.0075 -0.05">
+        <geom name="gripper_left_pad_geom" type="box" size="0.005 0.002 0.01"
+              mass="0.01" rgba="0.15 0.15 0.15 1"
+              friction="2 0.5 0.005" condim="4"/>
+        <site name="left_pad_site" pos="0 0 0" size="0.003" rgba="0 1 0 0.3"/>
+      </body>
+    </body>
+
+    <!-- Right finger assembly (mirrored) -->
+    <body name="gripper_right_finger" pos="0 -0.01 -0.015">
+      <joint name="gripper_right_joint" type="slide" axis="0 -1 0"
+             range="0 0.025" damping="2" stiffness="0"/>
+      <!-- Finger body -->
+      <geom name="gripper_right_body" type="box" size="0.005 0.0075 0.03"
+            pos="0 0 -0.03" mass="0.05" rgba="0.4 0.4 0.4 1"/>
+      <!-- Contact pad (high friction) -->
+      <body name="gripper_right_pad" pos="0 0.0075 -0.05">
+        <geom name="gripper_right_pad_geom" type="box" size="0.005 0.002 0.01"
+              mass="0.01" rgba="0.15 0.15 0.15 1"
+              friction="2 0.5 0.005" condim="4"/>
+        <site name="right_pad_site" pos="0 0 0" size="0.003" rgba="0 1 0 0.3"/>
+      </body>
+    </body>
+
+    <!-- TCP (tool center point) site - between pads -->
+    <site name="gripper_tcp" pos="0 0 -0.065" size="0.005" rgba="1 1 0 0.5"/>
+  </body>
+</mujoco>

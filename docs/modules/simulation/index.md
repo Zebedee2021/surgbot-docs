@@ -27,6 +27,7 @@
 
 - [Isaac Sim 环境搭建](isaac_sim_setup.md)
 - [虚拟手术室方案](surgery_room_sim.md)
+- [MuJoCo 仿真方案（提案）](mujoco_proposal.md)
 
 ---
 
@@ -37,7 +38,7 @@
 | 编号 | 问题 | 备选方案 | 状态 |
 |------|------|---------|------|
 | D-SM-01 | Isaac Sim 版本选择？ | A: 2023.1.1（稳定版） / B: 4.x（最新版） | ⬚待讨论 |
-| D-SM-02 | 是否与 MuJoCo/robosuite 双线并进？ | A: 仅 Isaac Sim / B: 双线并进保持兼容 | ⬚待讨论 |
+| D-SM-02 | 是否与 MuJoCo/robosuite 双线并进？ | A: 仅 Isaac Sim / B: 双线并进保持兼容 | [方案已提交](mujoco_proposal.md) |
 
 ## 已知瓶颈
 
