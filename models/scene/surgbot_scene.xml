@@ -1,7 +1,13 @@
 <!-- surgbot_scene.xml - Complete MuJoCo simulation scene
-     Dobot CR5 + DH-3 gripper + stereo camera + surgical instruments on tray
+     Dobot CR5 + DH-3 gripper + 2 trays + 2 cameras + surgical instruments
+     Layout based on 雄安现场测试 Figure 1:
+       - Robot arm base at center of table
+       - Instrument tray (-Y side, near instrument nurse)
+       - Bed-end tray (+Y side, near bed/surgeons)
+       - Camera 1 watches instrument tray
+       - Camera 2 watches bed-end tray
      Units: meters, radians, kg
-     Coordinate system: Z-up, X-forward (toward instruments) -->
+     Coordinate system: Z-up, +Y toward bed/surgeons -->
 <mujoco model="surgbot_v2">
   <compiler angle="radian" meshdir="../cr5/meshes"/>
 
@@ -28,13 +34,15 @@
     <material name="steel" rgba="0.75 0.75 0.78 1"/>
     <material name="dark_metal" rgba="0.2 0.2 0.2 1"/>
     <material name="table_green" rgba="0.3 0.5 0.3 1"/>
-    <material name="tray_blue" rgba="0.65 0.8 0.9 1"/>
-    <material name="tray_edge" rgba="0.5 0.68 0.78 1"/>
-    <material name="marker_green" rgba="0 0.8 0 0.4"/>
+    <material name="inst_tray_blue" rgba="0.6 0.78 0.92 1"/>
+    <material name="inst_tray_edge" rgba="0.45 0.65 0.8 1"/>
+    <material name="bed_tray_pink" rgba="0.92 0.72 0.72 1"/>
+    <material name="bed_tray_edge" rgba="0.8 0.55 0.55 1"/>
     <material name="gripper_blue" rgba="0.2 0.45 0.75 1"/>
     <material name="rubber_black" rgba="0.1 0.1 0.1 1"/>
     <material name="camera_dark" rgba="0.15 0.15 0.18 1"/>
     <material name="lens_glass" rgba="0.05 0.05 0.1 1"/>
+    <material name="bed_blue" rgba="0.6 0.7 0.85 1"/>
     <texture name="grid" type="2d" builtin="checker" width="512" height="512"
              rgb1="0.9 0.9 0.9" rgb2="0.8 0.8 0.8"/>
     <material name="floor_mat" texture="grid" texrepeat="10 10"/>
@@ -52,24 +60,40 @@
 
     <!-- ============================================ -->
     <!-- Operating table (surface at z=0.75m)         -->
-    <!-- body center at 0.73, top half-height 0.02    -->
-    <!-- legs: half-height 0.355, bottom at z=0       -->
+    <!-- Robot arm sits on this table, center area    -->
     <!-- ============================================ -->
-    <body name="table" pos="0.2 0 0.73">
-      <geom name="table_top" type="box" size="0.5 0.4 0.02"
-            material="table_green" mass="20"/>
+    <body name="table" pos="0 0 0.73">
+      <geom name="table_top" type="box" size="0.45 0.5 0.02"
+            material="table_green" mass="25"/>
       <geom name="table_leg1" type="cylinder" size="0.03 0.355"
-            pos="-0.45 -0.35 -0.375" rgba="0.5 0.5 0.5 1"/>
+            pos="-0.4 -0.45 -0.375" rgba="0.5 0.5 0.5 1"/>
       <geom name="table_leg2" type="cylinder" size="0.03 0.355"
-            pos="0.45 -0.35 -0.375" rgba="0.5 0.5 0.5 1"/>
+            pos="0.4 -0.45 -0.375" rgba="0.5 0.5 0.5 1"/>
       <geom name="table_leg3" type="cylinder" size="0.03 0.355"
-            pos="-0.45 0.35 -0.375" rgba="0.5 0.5 0.5 1"/>
+            pos="-0.4 0.45 -0.375" rgba="0.5 0.5 0.5 1"/>
       <geom name="table_leg4" type="cylinder" size="0.03 0.355"
-            pos="0.45 0.35 -0.375" rgba="0.5 0.5 0.5 1"/>
+            pos="0.4 0.45 -0.375" rgba="0.5 0.5 0.5 1"/>
     </body>
 
     <!-- ============================================ -->
-    <!-- CR5 Robot Arm (base on table, z=0.76)        -->
+    <!-- Hospital Bed (simplified, +Y side)           -->
+    <!-- Surgeons operate from the far +Y side        -->
+    <!-- ============================================ -->
+    <body name="hospital_bed" pos="-0.5 0.9 0.4">
+      <geom name="bed_surface" type="box" size="0.35 0.9 0.04"
+            material="bed_blue" mass="30"/>
+      <geom name="bed_leg1" type="cylinder" size="0.025 0.18"
+            pos="-0.3 -0.8 -0.22" rgba="0.4 0.4 0.4 1"/>
+      <geom name="bed_leg2" type="cylinder" size="0.025 0.18"
+            pos="0.3 -0.8 -0.22" rgba="0.4 0.4 0.4 1"/>
+      <geom name="bed_leg3" type="cylinder" size="0.025 0.18"
+            pos="-0.3 0.8 -0.22" rgba="0.4 0.4 0.4 1"/>
+      <geom name="bed_leg4" type="cylinder" size="0.025 0.18"
+            pos="0.3 0.8 -0.22" rgba="0.4 0.4 0.4 1"/>
+    </body>
+
+    <!-- ============================================ -->
+    <!-- CR5 Robot Arm (base on table center, z=0.76) -->
     <!-- ============================================ -->
     <body name="cr5_base" pos="0 0 0.76">
       <geom type="mesh" rgba="0 0 0 1" mesh="base_link"/>
@@ -133,35 +157,25 @@
                   <site name="ee_site" pos="0 0 0" size="0.01" rgba="1 0 0 0.5"/>
 
                   <!-- ======== DH-3 Gripper (mounted on Link6) ======== -->
-                  <!-- Gripper extends in +Z direction of Link6 frame   -->
-                  <!-- (toward tool side, away from arm body)            -->
-
-                  <!-- Connector flange between Link6 and gripper -->
                   <geom name="gripper_flange" type="cylinder" size="0.032 0.015"
                         pos="0 0 0.015" rgba="0.25 0.25 0.25 1"/>
 
                   <body name="gripper_base" pos="0 0 0.045">
-                    <!-- Housing (120x90x40mm, bright blue) -->
                     <geom name="gripper_housing" type="box" size="0.06 0.045 0.02"
                           mass="0.3" material="gripper_blue"/>
-                    <!-- Housing label stripe (visual) -->
                     <geom name="gripper_stripe" type="box" size="0.055 0.002 0.021"
                           pos="0 0 0" rgba="0.9 0.9 0.9 1"
                           contype="0" conaffinity="0"/>
 
-                    <!-- Left finger assembly -->
                     <body name="gripper_left_finger" pos="0 0.02 0.02">
                       <joint name="gripper_left" type="slide" axis="0 1 0"
                              range="0 0.03" damping="2"/>
-                      <!-- Finger bracket (metal) -->
                       <geom name="gripper_left_bracket" type="box"
                             size="0.015 0.012 0.015" pos="0 0 0.01"
                             mass="0.02" rgba="0.6 0.6 0.6 1"/>
-                      <!-- Finger body (elongated, bright red) -->
                       <geom name="gripper_left_body" type="box"
                             size="0.015 0.012 0.04" pos="0 0 0.055"
                             mass="0.05" rgba="0.85 0.15 0.1 1"/>
-                      <!-- Finger pad (rubber, dark) -->
                       <body name="gripper_left_pad" pos="0 -0.012 0.085">
                         <geom name="left_pad" type="box"
                               size="0.014 0.005 0.015" mass="0.01"
@@ -171,19 +185,15 @@
                       </body>
                     </body>
 
-                    <!-- Right finger assembly (mirrored) -->
                     <body name="gripper_right_finger" pos="0 -0.02 0.02">
                       <joint name="gripper_right" type="slide" axis="0 -1 0"
                              range="0 0.03" damping="2"/>
-                      <!-- Finger bracket (metal) -->
                       <geom name="gripper_right_bracket" type="box"
                             size="0.015 0.012 0.015" pos="0 0 0.01"
                             mass="0.02" rgba="0.6 0.6 0.6 1"/>
-                      <!-- Finger body (elongated, bright red) -->
                       <geom name="gripper_right_body" type="box"
                             size="0.015 0.012 0.04" pos="0 0 0.055"
                             mass="0.05" rgba="0.85 0.15 0.1 1"/>
-                      <!-- Finger pad (rubber, dark) -->
                       <body name="gripper_right_pad" pos="0 0.012 0.085">
                         <geom name="right_pad" type="box"
                               size="0.014 0.005 0.015" mass="0.01"
@@ -193,7 +203,6 @@
                       </body>
                     </body>
 
-                    <!-- TCP site (tool center point, between pads) -->
                     <site name="gripper_tcp" pos="0 0 0.1"
                           size="0.002" rgba="1 1 0 0.3"/>
                   </body>
@@ -206,124 +215,162 @@
         </body>
       </body>
     </body>
-    <!-- ============================================ -->
-    <!-- End CR5 Robot Arm                            -->
-    <!-- ============================================ -->
+    <!-- End CR5 Robot Arm -->
 
     <!-- ============================================ -->
-    <!-- Binocular Camera (RealSense D435i style)     -->
-    <!-- Stand at back of table, arm extends over     -->
-    <!-- workspace, camera looks down at tray         -->
+    <!-- Camera 1: Watches Instrument Tray (-Y side)  -->
+    <!-- Stand behind instrument tray, angled down    -->
     <!-- ============================================ -->
-    <body name="camera_stand" pos="0.3 0.35 0">
-      <!-- Vertical pole (ground to 1.1m) -->
-      <geom name="camera_pole" type="cylinder" size="0.012 0.55"
+    <body name="camera_stand_1" pos="0.35 -0.55 0">
+      <geom name="cam1_pole" type="cylinder" size="0.012 0.55"
             pos="0 0 0.55" rgba="0.35 0.35 0.35 1"/>
-      <!-- Horizontal bracket arm toward workspace -->
-      <geom name="camera_bracket" type="box" size="0.012 0.2 0.012"
-            pos="0 -0.2 1.1" rgba="0.35 0.35 0.35 1"/>
-      <!-- Camera head (at bracket end, tilted downward) -->
-      <body name="camera_head" pos="0 -0.38 1.08" euler="1.2 0 0">
-        <!-- Camera body (90x25x25mm) -->
-        <geom name="camera_housing" type="box" size="0.045 0.0125 0.0125"
+      <geom name="cam1_bracket" type="box" size="0.012 0.15 0.012"
+            pos="0 0.15 1.1" rgba="0.35 0.35 0.35 1"/>
+      <body name="camera_head_1" pos="0 0.28 1.08" euler="1.3 0 0">
+        <geom name="cam1_housing" type="box" size="0.045 0.0125 0.0125"
               material="camera_dark"/>
-        <!-- Left IR emitter -->
-        <geom name="cam_lens_L" type="cylinder" size="0.005 0.004"
+        <geom name="cam1_lens_L" type="cylinder" size="0.005 0.004"
               pos="-0.028 -0.017 0" euler="1.5708 0 0"
               material="lens_glass" contype="0" conaffinity="0"/>
-        <!-- Right IR emitter -->
-        <geom name="cam_lens_R" type="cylinder" size="0.005 0.004"
+        <geom name="cam1_lens_R" type="cylinder" size="0.005 0.004"
               pos="0.028 -0.017 0" euler="1.5708 0 0"
               material="lens_glass" contype="0" conaffinity="0"/>
-        <!-- Center RGB lens -->
-        <geom name="cam_lens_C" type="cylinder" size="0.004 0.004"
+        <geom name="cam1_lens_C" type="cylinder" size="0.004 0.004"
               pos="0 -0.017 0" euler="1.5708 0 0"
               rgba="0.1 0.1 0.3 1" contype="0" conaffinity="0"/>
-        <site name="camera_site" pos="0 -0.02 0" size="0.003"/>
+        <site name="camera1_site" pos="0 -0.02 0" size="0.003"/>
       </body>
+      <!-- Label -->
+      <geom name="cam1_label" type="box" size="0.03 0.002 0.01"
+            pos="0 0 1.13" rgba="1 0.9 0.3 1"
+            contype="0" conaffinity="0"/>
     </body>
 
     <!-- ============================================ -->
-    <!-- Instrument Tray (on table, with raised edges)-->
-    <!-- Tray center at z=0.758, surface at ~0.762    -->
-    <!-- 250x180mm with 15mm border walls             -->
+    <!-- Camera 2: Watches Bed-end Tray (+Y side)     -->
+    <!-- Stand behind bed-end tray, angled down       -->
     <!-- ============================================ -->
-    <body name="instrument_tray" pos="0.3 -0.1 0.758">
-      <!-- Tray base (250x180x8mm) -->
-      <geom name="tray_surface" type="box" size="0.125 0.09 0.004"
-            mass="0.3" material="tray_blue" friction="0.8 0.3 0.001"/>
-      <!-- Raised edges -->
-      <geom name="tray_edge_front" type="box" size="0.125 0.003 0.0075"
-            pos="0 -0.09 0.012" material="tray_edge"/>
-      <geom name="tray_edge_back" type="box" size="0.125 0.003 0.0075"
-            pos="0 0.09 0.012" material="tray_edge"/>
-      <geom name="tray_edge_left" type="box" size="0.003 0.09 0.0075"
-            pos="-0.125 0 0.012" material="tray_edge"/>
-      <geom name="tray_edge_right" type="box" size="0.003 0.09 0.0075"
-            pos="0.125 0 0.012" material="tray_edge"/>
+    <body name="camera_stand_2" pos="0.35 0.55 0">
+      <geom name="cam2_pole" type="cylinder" size="0.012 0.55"
+            pos="0 0 0.55" rgba="0.35 0.35 0.35 1"/>
+      <geom name="cam2_bracket" type="box" size="0.012 0.15 0.012"
+            pos="0 -0.15 1.1" rgba="0.35 0.35 0.35 1"/>
+      <body name="camera_head_2" pos="0 -0.28 1.08" euler="-1.3 0 3.1416">
+        <geom name="cam2_housing" type="box" size="0.045 0.0125 0.0125"
+              material="camera_dark"/>
+        <geom name="cam2_lens_L" type="cylinder" size="0.005 0.004"
+              pos="-0.028 -0.017 0" euler="1.5708 0 0"
+              material="lens_glass" contype="0" conaffinity="0"/>
+        <geom name="cam2_lens_R" type="cylinder" size="0.005 0.004"
+              pos="0.028 -0.017 0" euler="1.5708 0 0"
+              material="lens_glass" contype="0" conaffinity="0"/>
+        <geom name="cam2_lens_C" type="cylinder" size="0.004 0.004"
+              pos="0 -0.017 0" euler="1.5708 0 0"
+              rgba="0.1 0.1 0.3 1" contype="0" conaffinity="0"/>
+        <site name="camera2_site" pos="0 -0.02 0" size="0.003"/>
+      </body>
+      <!-- Label -->
+      <geom name="cam2_label" type="box" size="0.03 0.002 0.01"
+            pos="0 0 1.13" rgba="0.3 0.9 0.5 1"
+            contype="0" conaffinity="0"/>
     </body>
 
     <!-- ============================================ -->
-    <!-- 4 Surgical Instruments (free joints)         -->
-    <!-- Each has distinct color + shape features     -->
-    <!-- Positions on tray, z=0.77 (above tray surf.) -->
+    <!-- Instrument Tray (器械托盘, -Y side)          -->
+    <!-- Near instrument nurse, holds 4 instruments   -->
+    <!-- On table surface, z=0.758                    -->
+    <!-- ============================================ -->
+    <body name="instrument_tray" pos="0 -0.3 0.758">
+      <geom name="inst_tray_surface" type="box" size="0.13 0.1 0.004"
+            mass="0.3" material="inst_tray_blue" friction="0.8 0.3 0.001"/>
+      <geom name="inst_tray_front" type="box" size="0.13 0.003 0.0075"
+            pos="0 -0.1 0.012" material="inst_tray_edge"/>
+      <geom name="inst_tray_back" type="box" size="0.13 0.003 0.0075"
+            pos="0 0.1 0.012" material="inst_tray_edge"/>
+      <geom name="inst_tray_left" type="box" size="0.003 0.1 0.0075"
+            pos="-0.13 0 0.012" material="inst_tray_edge"/>
+      <geom name="inst_tray_right" type="box" size="0.003 0.1 0.0075"
+            pos="0.13 0 0.012" material="inst_tray_edge"/>
+      <!-- Label: "器械" text marker (visual) -->
+      <geom name="inst_tray_label" type="box" size="0.025 0.008 0.001"
+            pos="0.09 -0.08 0.005" rgba="0.2 0.4 0.7 1"
+            contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- ============================================ -->
+    <!-- Bed-end Tray (床尾托盘, +Y side)             -->
+    <!-- Near bed foot, receives delivered instruments -->
+    <!-- On table surface, z=0.758                    -->
+    <!-- ============================================ -->
+    <body name="bed_tray" pos="0 0.3 0.758">
+      <geom name="bed_tray_surface" type="box" size="0.13 0.1 0.004"
+            mass="0.3" material="bed_tray_pink" friction="0.8 0.3 0.001"/>
+      <geom name="bed_tray_front" type="box" size="0.13 0.003 0.0075"
+            pos="0 -0.1 0.012" material="bed_tray_edge"/>
+      <geom name="bed_tray_back" type="box" size="0.13 0.003 0.0075"
+            pos="0 0.1 0.012" material="bed_tray_edge"/>
+      <geom name="bed_tray_left" type="box" size="0.003 0.1 0.0075"
+            pos="-0.13 0 0.012" material="bed_tray_edge"/>
+      <geom name="bed_tray_right" type="box" size="0.003 0.1 0.0075"
+            pos="0.13 0 0.012" material="bed_tray_edge"/>
+      <!-- Label: "床尾" text marker (visual) -->
+      <geom name="bed_tray_label" type="box" size="0.025 0.008 0.001"
+            pos="0.09 0.08 0.005" rgba="0.7 0.3 0.3 1"
+            contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- ============================================ -->
+    <!-- 4 Surgical Instruments on Instrument Tray    -->
+    <!-- Positions relative to inst tray (0, -0.3)    -->
+    <!-- z=0.77 (above tray surface)                  -->
     <!-- ============================================ -->
 
     <!-- Instrument 0: Scalpel (刀柄) - YELLOW handle + silver blade -->
-    <body name="scalpel_handle" pos="0.22 -0.12 0.77">
+    <body name="scalpel_handle" pos="-0.06 -0.34 0.77">
       <joint name="scalpel_free" type="free"/>
       <geom name="scalpel_shaft" type="cylinder" size="0.006 0.05"
             mass="0.04" rgba="0.9 0.8 0.2 1"
-            euler="0 1.5708 0.6"/>
+            euler="0 1.5708 0"/>
       <geom name="scalpel_blade" type="box" size="0.015 0.005 0.001"
             pos="0.04 0.025 0" mass="0.01" rgba="0.88 0.88 0.92 1"/>
     </body>
 
     <!-- Instrument 1: Tweezers (镊子) - GOLD/BRASS, twin prongs -->
-    <body name="tweezers" pos="0.28 -0.06 0.77">
+    <body name="tweezers" pos="-0.02 -0.26 0.77">
       <joint name="tweezers_free" type="free"/>
       <geom name="tweezers_arm1" type="capsule" size="0.002 0.06"
             pos="0 0.002 0" mass="0.015" rgba="0.8 0.7 0.3 1"
-            euler="0 1.5708 0.4"/>
+            euler="0 1.5708 0"/>
       <geom name="tweezers_arm2" type="capsule" size="0.002 0.06"
             pos="0 -0.002 0" mass="0.015" rgba="0.8 0.7 0.3 1"
-            euler="0 1.5708 0.4"/>
+            euler="0 1.5708 0"/>
     </body>
 
-    <!-- Instrument 2: Scissors (剪刀) - silver body + GREEN ring handles -->
-    <body name="scissors" pos="0.34 -0.14 0.77">
+    <!-- Instrument 2: Scissors (剪刀) - silver + GREEN rings -->
+    <body name="scissors" pos="0.02 -0.34 0.77">
       <joint name="scissors_free" type="free"/>
       <geom name="scissors_shaft" type="capsule" size="0.003 0.05"
             mass="0.04" rgba="0.78 0.78 0.82 1"
-            euler="0 1.5708 0.9"/>
+            euler="0 1.5708 0"/>
       <geom name="scissors_ring1" type="cylinder" size="0.013 0.003"
             pos="-0.04 -0.02 0" mass="0.01" rgba="0.2 0.65 0.35 1"/>
       <geom name="scissors_ring2" type="cylinder" size="0.013 0.003"
             pos="-0.035 -0.028 0" mass="0.01" rgba="0.2 0.65 0.35 1"/>
     </body>
 
-    <!-- Instrument 3: Needle holder (持针钳) - BLUE handle + silver jaw -->
-    <body name="needle_holder" pos="0.38 -0.08 0.77">
+    <!-- Instrument 3: Needle holder (持针钳) - BLUE handle + jaw -->
+    <body name="needle_holder" pos="0.06 -0.26 0.77">
       <joint name="needle_holder_free" type="free"/>
       <geom name="needle_holder_shaft" type="capsule" size="0.004 0.055"
             mass="0.05" rgba="0.3 0.5 0.8 1"
-            euler="0 1.5708 0.2"/>
+            euler="0 1.5708 0"/>
       <geom name="needle_holder_jaw" type="box" size="0.018 0.005 0.002"
             pos="0.06 0.01 0" mass="0.01" rgba="0.78 0.78 0.82 1"/>
       <geom name="needle_holder_ring" type="cylinder" size="0.014 0.003"
             pos="-0.05 -0.01 0" mass="0.01" rgba="0.3 0.5 0.8 1"/>
     </body>
-    <!-- ============================================ -->
-    <!-- End Instruments                              -->
-    <!-- ============================================ -->
+    <!-- End Instruments -->
 
-    <!-- Delivery point marker (visual only) -->
-    <body name="delivery_marker" pos="-0.2 0.3 0.85">
-      <geom name="delivery_zone" type="cylinder" size="0.05 0.003"
-            material="marker_green" contype="0" conaffinity="0"/>
-      <site name="delivery_site" pos="0 0 0.005" size="0.01"
-            rgba="0 0.8 0 0.5"/>
-    </body>
   </worldbody>
 
   <!-- ============================================ -->
@@ -348,9 +395,7 @@
               ctrlrange="0 0.03"/>
   </actuator>
 
-  <!-- ============================================ -->
-  <!-- Sensors                                      -->
-  <!-- ============================================ -->
+  <!-- Sensors -->
   <sensor>
     <force name="ee_force" site="ee_site"/>
     <torque name="ee_torque" site="ee_site"/>
@@ -358,40 +403,39 @@
     <touch name="right_pad_touch" site="right_pad_site"/>
   </sensor>
 
-  <!-- ============================================ -->
-  <!-- Equality: gripper finger coupling            -->
-  <!-- ============================================ -->
+  <!-- Equality: gripper finger coupling -->
   <equality>
     <joint joint1="gripper_left" joint2="gripper_right" polycoef="0 1 0 0 0"/>
   </equality>
 
   <!-- ============================================ -->
   <!-- Keyframes                                    -->
+  <!-- Joint1=0 faces -Y (inst tray), pi faces +Y  -->
   <!-- ============================================ -->
   <keyframe>
     <!-- Home / zero position -->
     <key name="home"
          qpos="0 0 0 0 0 0 0 0
-               0.22 -0.12 0.77 1 0 0 0
-               0.28 -0.06 0.77 1 0 0 0
-               0.34 -0.14 0.77 1 0 0 0
-               0.38 -0.08 0.77 1 0 0 0"
+               -0.06 -0.34 0.77 1 0 0 0
+               -0.02 -0.26 0.77 1 0 0 0
+               0.02 -0.34 0.77 1 0 0 0
+               0.06 -0.26 0.77 1 0 0 0"
          ctrl="0 0 0 0 0 0 0.02 0.02"/>
-    <!-- Reset: [0, 32.6, -129.1, 6.7, 90, -90] deg -->
+    <!-- Reset: arm facing instrument tray (-Y), [0, 32.6, -129.1, 6.7, 90, -90] deg -->
     <key name="reset"
          qpos="0 0.5691 -2.2532 0.1169 1.5708 -1.5708 0 0
-               0.22 -0.12 0.77 1 0 0 0
-               0.28 -0.06 0.77 1 0 0 0
-               0.34 -0.14 0.77 1 0 0 0
-               0.38 -0.08 0.77 1 0 0 0"
+               -0.06 -0.34 0.77 1 0 0 0
+               -0.02 -0.26 0.77 1 0 0 0
+               0.02 -0.34 0.77 1 0 0 0
+               0.06 -0.26 0.77 1 0 0 0"
          ctrl="0 0.5691 -2.2532 0.1169 1.5708 -1.5708 0.02 0.02"/>
-    <!-- Target: [0, -50.2, -67.3, 112.5, 90, -90] deg -->
+    <!-- Target: arm facing bed-end tray (+Y), [180, -50.2, -67.3, 112.5, 90, -90] deg -->
     <key name="target"
-         qpos="0 -0.8762 -1.1745 1.9635 1.5708 -1.5708 0 0
-               0.22 -0.12 0.77 1 0 0 0
-               0.28 -0.06 0.77 1 0 0 0
-               0.34 -0.14 0.77 1 0 0 0
-               0.38 -0.08 0.77 1 0 0 0"
-         ctrl="0 -0.8762 -1.1745 1.9635 1.5708 -1.5708 0.02 0.02"/>
+         qpos="3.1416 -0.8762 -1.1745 1.9635 1.5708 -1.5708 0 0
+               -0.06 -0.34 0.77 1 0 0 0
+               -0.02 -0.26 0.77 1 0 0 0
+               0.02 -0.34 0.77 1 0 0 0
+               0.06 -0.26 0.77 1 0 0 0"
+         ctrl="3.1416 -0.8762 -1.1745 1.9635 1.5708 -1.5708 0.02 0.02"/>
   </keyframe>
 </mujoco>
