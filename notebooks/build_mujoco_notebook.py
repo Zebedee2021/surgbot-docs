@@ -1,10 +1,11 @@
 """Build the MuJoCo Phase A demo Colab notebook.
 
 Layout: Dual-tray design based on 雄安现场测试 Figure 1
-  - Instrument tray (器械托盘, -Y side)
-  - Bed-end tray (床尾托盘, +Y side)
+  - Both trays in FRONT of arm (+X direction), side by side
+  - Instrument tray (器械托盘, front-left, +X -Y)
+  - Bed-end tray (床尾托盘, front-right, +X +Y)
   - Camera 1 watches instrument tray, Camera 2 watches bed-end tray
-  - Robot arm picks from instrument tray, delivers to bed-end tray
+  - Arm swings J1 ±27° to reach each tray
 
 Usage: py -3.11 notebooks/build_mujoco_notebook.py
 """
@@ -33,8 +34,8 @@ cells.append(md("""# MuJoCo Simulation Demo - Dobot CR5 Surgical Robot
 **Phase A: Dual-Tray Clinical Workflow (器械托盘 → 床尾托盘)**
 
 Based on the 雄安现场测试 Figure 1 layout, this notebook demonstrates:
-- **Robot arm** (Dobot CR5) picks instruments from the **instrument tray** (-Y side)
-- Rotates via J1 (0 → π) to face the **bed-end tray** (+Y side)
+- **Robot arm** (Dobot CR5) picks instruments from the **instrument tray** (front-left)
+- Swings J1 (−27° → +27°) to face the **bed-end tray** (front-right)
 - Delivers instruments to the bed-end tray for the surgeon
 
 | Component | Description |
@@ -42,10 +43,10 @@ Based on the 雄安现场测试 Figure 1 layout, this notebook demonstrates:
 | CR5 MJCF model | 6-DOF collaborative arm (from official URDF + STL meshes) |
 | DH-3 parallel gripper | 2-finger, slide joints, red fingers on blue housing |
 | 4 surgical instruments | Scalpel (yellow), tweezers (gold), scissors (green), needle holder (blue) |
-| Instrument tray (器械托盘) | Blue tray on -Y side, holds instruments for pickup |
-| Bed-end tray (床尾托盘) | Pink tray on +Y side, receives delivered instruments |
+| Instrument tray (器械托盘) | Blue tray, front-left (+X −Y), holds instruments for pickup |
+| Bed-end tray (床尾托盘) | Pink tray, front-right (+X +Y), receives delivered instruments |
 | Dual cameras | Camera 1 watches instrument tray, Camera 2 watches bed-end tray |
-| Hospital bed | +Y far side, representing surgical field |
+| Hospital bed | Far +X side, representing surgical field |
 
 > Run all cells in order. First cell installs dependencies (~30s)."""))
 
@@ -110,9 +111,9 @@ def render_frame(data, camera_name=None, elevation=-25, azimuth=135, distance=2.
 def deg2rad(degrees):
     return [math.radians(d) for d in degrees]
 
-# Known poses (J1=0 faces -Y inst tray, J1=pi faces +Y bed tray)
-RESET_RAD  = deg2rad([0,   32.6, -129.1, 6.7,  90, -90])   # facing inst tray
-TARGET_RAD = deg2rad([180, -50.2, -67.3, 112.5, 90, -90])   # facing bed tray
+# Known poses (J1=-27° faces front-left inst tray, J1=+27° faces front-right bed tray)
+RESET_RAD  = deg2rad([-26.4, 32.6, -129.1, 6.7,  90, -90])   # inst tray (front-left)
+TARGET_RAD = deg2rad([26.4,  32.6, -129.1, 6.7,  90, -90])   # bed tray (front-right)
 
 print("Renderer ready: 960x720")
 print(f"  RESET  (inst tray):  J1={RESET_RAD[0]:.3f} rad")
@@ -126,8 +127,8 @@ fig, axes = plt.subplots(1, 3, figsize=(18, 6))
 keyframe_names = ['home', 'reset', 'target']
 titles = [
     'Home (Zero Position)',
-    'Reset: Facing Instrument Tray (-Y)',
-    'Target: Facing Bed-end Tray (+Y)',
+    'Reset: Facing Instrument Tray (Front-Left)',
+    'Target: Facing Bed-end Tray (Front-Right)',
 ]
 
 for idx, (kname, title) in enumerate(zip(keyframe_names, titles)):
@@ -182,7 +183,7 @@ plt.tight_layout()
 plt.show()"""))
 
 # ── Cell 6: Instrument close-up ──
-cells.append(code("""# Cell 6: Close-up of instrument tray (器械托盘, -Y side)
+cells.append(code("""# Cell 6: Close-up of instrument tray (器械托盘, front-left)
 fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 
 # Set to home (instruments visible on tray)
@@ -190,8 +191,8 @@ key_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, 'home')
 data.qpos[:] = model.key_qpos[key_id]
 mujoco.mj_forward(model, data)
 
-frame = render_frame(data, distance=0.65, elevation=-30, azimuth=160,
-                     lookat=[0.0, -0.3, 0.76])
+frame = render_frame(data, distance=0.65, elevation=-30, azimuth=200,
+                     lookat=[0.35, -0.15, 0.76])
 ax.imshow(frame)
 ax.set_title('Instrument Tray Close-up (器械托盘, 4 Surgical Instruments)',
              fontsize=14, fontweight='bold')
@@ -213,8 +214,8 @@ plt.tight_layout()
 plt.show()"""))
 
 # ── Cell 7: Animate arm rotation from inst tray to bed tray ──
-cells.append(code("""# Cell 7: Arm rotation animation - Instrument Tray (-Y) → Bed-end Tray (+Y)
-# J1 rotates from 0 to π while other joints interpolate reset→target
+cells.append(code("""# Cell 7: Arm rotation animation - Instrument Tray (front-left) → Bed-end Tray (front-right)
+# J1 swings −27° → +27° (other joints constant)
 frames = []
 n_steps = 180
 fps = 30
@@ -250,7 +251,7 @@ for step in range(n_steps):
         frames.append(render_frame(data, distance=2.4, elevation=-22, azimuth=az))
 
 print(f"Captured {len(frames)} frames")
-print(f"Arm J1: 0 rad (inst tray, -Y) → π rad (bed tray, +Y)")
+print(f"Arm J1: {RESET_RAD[0]:.3f} rad (inst tray, front-left) → {TARGET_RAD[0]:.3f} rad (bed tray, front-right)")
 media.show_video(frames, fps=fps,
                  title="Arm Rotation: Instrument Tray → Bed-end Tray")"""))
 
@@ -283,7 +284,7 @@ data.qpos[scalpel_qadr+3:scalpel_qadr+7] = [0.707, 0, 0, 0.707]
 data.qvel[scalpel_dofadr:scalpel_dofadr+6] = 0
 mujoco.mj_forward(model, data)
 
-print("Phase 0: Arm at instrument tray (-Y), scalpel positioned for grasp")
+print("Phase 0: Arm at instrument tray (front-left), scalpel positioned for grasp")
 
 # === Phase 1: Pre-grasp (show scalpel between open fingers) ===
 print("Phase 1: Pre-grasp - scalpel between open fingers")
@@ -313,11 +314,11 @@ for _ in range(8):
     frames_pick.append(render_frame(data, distance=0.35, elevation=-15,
                                     azimuth=145, lookat=list(cur_tcp)))
 
-# === Phase 3: Rotate arm from inst tray (-Y) to bed tray (+Y) ===
+# === Phase 3: Rotate arm from inst tray (front-left) to bed tray (front-right) ===
 # Interpolate all 6 joints from RESET_RAD to TARGET_RAD while holding grip
-print("Phase 3: Rotating arm from instrument tray to bed-end tray (J1: 0→π)")
+print("Phase 3: Rotating arm from instrument tray to bed-end tray (J1: −27° → +27°)")
 n_rotate = 120
-scene_center = [0.0, 0.0, 0.85]
+scene_center = [0.35, 0.0, 0.85]
 for step in range(n_rotate):
     t = step / (n_rotate - 1)
     t_smooth = 0.5 * (1 - math.cos(math.pi * t))
@@ -339,7 +340,7 @@ for _ in range(10):
         mujoco.mj_step(model, data)
 
 # === Phase 4: Show arm at bed-end tray, zoom in ===
-print("Phase 4: Arrived at bed-end tray (+Y)")
+print("Phase 4: Arrived at bed-end tray (front-right)")
 cur_tcp = data.site_xpos[tcp_id].copy()
 for _ in range(8):
     for __ in range(20):
@@ -356,7 +357,7 @@ for step in range(40):
         mujoco.mj_step(model, data)
     if step % 2 == 0:
         frames_pick.append(render_frame(data, distance=0.8, elevation=-22,
-                                        azimuth=165, lookat=[0.0, 0.3, 0.8]))
+                                        azimuth=165, lookat=[0.35, 0.15, 0.8]))
 
 # === Phase 6: Let scalpel settle on bed-end tray (physics!) ===
 print("Phase 6: Scalpel settling on bed-end tray surface")
@@ -365,16 +366,16 @@ for step in range(30):
         mujoco.mj_step(model, data)
     if step % 2 == 0:
         frames_pick.append(render_frame(data, distance=1.0, elevation=-25,
-                                        azimuth=160, lookat=[0.0, 0.3, 0.8]))
+                                        azimuth=160, lookat=[0.35, 0.15, 0.8]))
 
 # Final check
 scalpel_pos = data.qpos[scalpel_qadr:scalpel_qadr+3].copy()
-bed_tray_y = 0.3
+bed_tray_y = 0.15
 print(f"\\nScalpel final pos: [{scalpel_pos[0]:.3f}, {scalpel_pos[1]:.3f}, {scalpel_pos[2]:.3f}]")
-print(f"Bed-end tray center: y={bed_tray_y}")
+print(f"Bed-end tray center: x=0.35, y={bed_tray_y}")
 print(f"Distance to bed tray (y): {abs(scalpel_pos[1] - bed_tray_y):.3f} m")
 print(f"Captured {len(frames_pick)} frames")
-print("Workflow: instrument tray → grasp → rotate (J1: 0→π) → bed-end tray → release")
+print("Workflow: instrument tray → grasp → rotate (J1: −27° → +27°) → bed-end tray → release")
 media.show_video(frames_pick, fps=15,
                  title="Pick-and-Place: Instrument Tray → Bed-end Tray")"""))
 
@@ -387,11 +388,11 @@ print("=" * 60)
 print(f"\\nRobot: Dobot CR5AF (6-DOF collaborative arm)")
 print(f"Gripper: DH-3 (2-finger parallel, slide joints)")
 print(f"Layout: Based on 雄安现场测试 Figure 1")
-print(f"  Instrument Tray (器械托盘): -Y side, blue, holds 4 instruments")
-print(f"  Bed-end Tray (床尾托盘): +Y side, pink, delivery target")
+print(f"  Instrument Tray (器械托盘): front-left (+X −Y), blue, holds 4 instruments")
+print(f"  Bed-end Tray (床尾托盘): front-right (+X +Y), pink, delivery target")
 print(f"  Camera 1: watches instrument tray")
 print(f"  Camera 2: watches bed-end tray")
-print(f"  Hospital Bed: +Y far side")
+print(f"  Hospital Bed: far +X side")
 
 print(f"\\n--- Model Statistics ---")
 print(f"Bodies:     {model.nbody}")
@@ -422,7 +423,7 @@ for kname in ['home', 'reset', 'target']:
     mujoco.mj_forward(model, data)
     ee = data.site_xpos[model.site("ee_site").id]
     j1_deg = math.degrees(data.qpos[0])
-    facing = "center" if abs(j1_deg) < 5 else ("-Y inst tray" if j1_deg < 90 else "+Y bed tray")
+    facing = "center" if abs(j1_deg) < 5 else ("front-left inst tray" if j1_deg < 0 else "front-right bed tray")
     print(f"  {kname:8s}: EE=[{ee[0]:.3f}, {ee[1]:.3f}, {ee[2]:.3f}] J1={j1_deg:.0f}° → {facing}")
 
 print(f"\\n--- Phase A Status ---")
